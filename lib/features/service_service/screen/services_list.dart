@@ -48,7 +48,7 @@ class _ServicesListState extends State<ServicesList> {
                       Row(
                         children: [
                           Text(
-                            selectedCategory.categoryName,
+                            "${selectedCategory.order}.${selectedCategory.categoryName}",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: Dimensions.dimenisonNo30,
@@ -153,7 +153,9 @@ class _ServicesListState extends State<ServicesList> {
                       return ListView.builder(
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
-                            ServiceModel serviceModel = snapshot.data![index];
+                            List<ServiceModel> sortedServices = snapshot.data!
+                              ..sort((a, b) => a.order.compareTo(b.order));
+                            ServiceModel serviceModel = sortedServices[index];
                             return SingleServiceTap(
                               serviceModel: serviceModel,
                               categoryModel: selectedCategory,

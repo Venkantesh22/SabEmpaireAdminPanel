@@ -6,6 +6,7 @@ import 'package:admin_panel_ak/widget/button/customauthbutton.dart';
 import 'package:admin_panel_ak/widget/text_box/customtextfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 
 class EditCategoryPopup extends StatefulWidget {
@@ -26,6 +27,9 @@ class _EditCategoryPopupState extends State<EditCategoryPopup> {
     ServiceProvider serviceProvider = Provider.of<ServiceProvider>(context);
     final TextEditingController _categoryController =
         TextEditingController(text: widget.categoryModel?.categoryName);
+
+    final TextEditingController _orderAtController =
+        TextEditingController(text: widget.categoryModel?.order.toString());
 
     return AlertDialog(
       titlePadding: EdgeInsets.only(
@@ -61,9 +65,19 @@ class _EditCategoryPopupState extends State<EditCategoryPopup> {
         ],
       ),
       content: SizedBox(
-        height: Dimensions.dimenisonNo60,
-        child: FormCustomTextField(
-            controller: _categoryController, title: "Category Name"),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FormCustomTextField(
+                controller: _categoryController, title: "Category Name"),
+            SizedBox(height: Dimensions.dimenisonNo12),
+            FormCustomTextField(
+              controller: _orderAtController,
+              title: "Order at",
+            ),
+            SizedBox(height: Dimensions.dimenisonNo12),
+          ],
+        ),
       ),
       actions: [
         Row(
@@ -85,13 +99,18 @@ class _EditCategoryPopupState extends State<EditCategoryPopup> {
                 try {
                   showLoaderDialog(context);
 
-                  bool isVaildated =
-                      addNewCategoryVaildation(_categoryController.text);
+                  bool isVaildated = addNewCategoryVaildation(
+                    _categoryController.text,
+                    int.parse(_orderAtController.text.trim()),
+                    context,
+                  );
 
                   if (isVaildated) {
-                    CategoryModel categoryModel = widget.categoryModel!
-                        .copyWith(
-                            categoryName: _categoryController.text.trim());
+                    CategoryModel categoryModel =
+                        widget.categoryModel!.copyWith(
+                      categoryName: _categoryController.text.trim(),
+                      order: int.parse(_orderAtController.text.trim()),
+                    );
 
                     serviceProvider.updateSingleCategoryPro(categoryModel);
 

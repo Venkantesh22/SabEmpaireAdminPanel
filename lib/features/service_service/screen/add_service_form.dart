@@ -28,6 +28,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
 
   final TextEditingController _hoursController = TextEditingController();
   final TextEditingController _minController = TextEditingController();
+  final TextEditingController _orderAtController = TextEditingController();
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
     _priceController.dispose();
     _hoursController.dispose();
     _minController.dispose();
+    _orderAtController.dispose();
     super.dispose();
   }
 
@@ -126,6 +128,16 @@ class _AddServiceFormState extends State<AddServiceForm> {
               SizedBox(
                 height: Dimensions.dimenisonNo20,
               ),
+              SizedBox(
+                width: Dimensions.dimenisonNo200,
+                child: FormCustomTextField(
+                  controller: _orderAtController,
+                  title: "Order",
+                ),
+              ),
+              SizedBox(
+                height: Dimensions.dimenisonNo20,
+              ),
               // Time duration and Service For fields
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,11 +207,12 @@ class _AddServiceFormState extends State<AddServiceForm> {
                   try {
                     // Validate form fields
                     bool isValidated = addNewServiceVaildation(
-                      _serviceController.text,
-                      _priceController.text,
-                      _hoursController.text,
-                      _minController.text,
-                    );
+                        _serviceController.text,
+                        _priceController.text,
+                        _hoursController.text,
+                        _minController.text,
+                        int.parse(_orderAtController.text.trim()),
+                        context);
 
                     if (!isValidated) {
                       showMessage("Please fill all required fields correctly.");
@@ -220,6 +233,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
                       double.parse(_priceController.text.trim()),
                       int.parse(_hoursController.text.trim()),
                       int.parse(_minController.text.trim()),
+                      int.parse(_orderAtController.text.trim()),
                     );
 
                     // Update category status if required

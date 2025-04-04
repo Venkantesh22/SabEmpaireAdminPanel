@@ -68,7 +68,7 @@ class SingleServiceTap extends StatelessWidget {
       mainAxisSize: MainAxisSize.min, // Shrink wrap content vertically
       children: [
         Text(
-          serviceModel.servicesName,
+          "${serviceModel.order}.${serviceModel.servicesName}",
           style: TextStyle(
             color: Colors.black,
             fontSize: Dimensions.dimenisonNo20,

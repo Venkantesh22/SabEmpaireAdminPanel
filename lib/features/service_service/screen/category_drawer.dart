@@ -32,6 +32,10 @@ class _CatergoryDrawerState extends State<CatergoryDrawer> {
         Provider.of<ServiceProvider>(context, listen: false);
     // await serviceProvider.callBackFunction(appProvider.getSalonInformation.id);
     await serviceProvider.getCategoryListPro();
+
+    // Sort the category list by order
+    serviceProvider.getCategoryList.sort((a, b) => a.order.compareTo(b.order));
+
     setState(() {
       isLoading = false;
     });
@@ -130,7 +134,8 @@ class _CatergoryDrawerState extends State<CatergoryDrawer> {
                             CategoryModel categoryModel =
                                 serviceProvider.getCategoryList[index];
                             return CatergryButton(
-                              text: categoryModel.categoryName,
+                              text:
+                                  "${categoryModel.order}.${categoryModel.categoryName}",
                               isSelected:
                                   serviceProvider.selectedCategory?.id ==
                                       categoryModel.id,

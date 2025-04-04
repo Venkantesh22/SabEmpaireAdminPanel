@@ -14,6 +14,7 @@ class AddNewThreeCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     ServiceProvider serviceProvider = Provider.of<ServiceProvider>(context);
     final TextEditingController _categoryController = TextEditingController();
+    final TextEditingController _orderAtController = TextEditingController();
 
     return AlertDialog(
       titlePadding: EdgeInsets.only(
@@ -78,13 +79,17 @@ class AddNewThreeCategory extends StatelessWidget {
                   print(
                       "select super category is ${serviceProvider.selectedCategory!.categoryName}");
 
-                  bool isVaildated =
-                      addNewCategoryVaildation(_categoryController.text);
+                  bool isVaildated = addNewCategoryVaildation(
+                    _categoryController.text,
+                    int.parse(_orderAtController.text.trim()),
+                    context,
+                  );
 
                   if (isVaildated) {
                     showLoaderDialog(context);
                     serviceProvider.addNewCategoryPro(
                         _categoryController.text.trim(),
+                        int.parse(_orderAtController.text.trim()),
                         serviceProvider.getSelectSuperCategoryModel!,
                         context);
 

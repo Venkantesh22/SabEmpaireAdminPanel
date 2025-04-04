@@ -31,22 +31,27 @@ class ServiceProvider with ChangeNotifier {
 
   //! ------- Super category fun ----------------
 
-  //Function to super fatch CategoryList
-  Future<void> getSuperCategoryListPro() async {
-    _superCategoryList =
-        await ServiceFirebaseFirestore.instance.getAllSuperCategories();
-    notifyListeners();
+  // Stream to fetch Super Category List
+  Stream<List<SuperCategoryModel>> getSuperCategoryListPro() {
+    return FirebaseFirestore.instance
+        .collection("superCategory")
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => SuperCategoryModel.fromJson(doc.data()))
+            .toList());
   }
 
   //Function to create new category to List
   Future<void> addNewSuperCategoryPro(
     String superCategoryName,
+    int order,
     Uint8List superCateImage,
     BuildContext context,
   ) async {
     SuperCategoryModel superCategoryModel =
         await ServiceFirebaseFirestore.instance.createSuperCategory(
       superCategoryName,
+      order,
       superCateImage,
     );
 
@@ -56,7 +61,8 @@ class ServiceProvider with ChangeNotifier {
 
   // Update a single Category
   void updateSingleSuperCategoryPro(
-      SuperCategoryModel superCategoryModel) async {
+    SuperCategoryModel superCategoryModel,
+  ) async {
     await ServiceFirebaseFirestore.instance
         .updateSuperCategoryWithoutImage(superCategoryModel);
     var isRemove = _superCategoryList.remove(superCategoryModel);
@@ -67,7 +73,9 @@ class ServiceProvider with ChangeNotifier {
   }
 
   void updateSingleSuperCategoryWIthImagePro(
-      SuperCategoryModel superCategoryModel, Uint8List selectedImage) async {
+    SuperCategoryModel superCategoryModel,
+    Uint8List selectedImage,
+  ) async {
     await ServiceFirebaseFirestore.instance
         .updateSuperCategoryWithImage(superCategoryModel, selectedImage);
     var isRemove = _superCategoryList.remove(superCategoryModel);
@@ -109,11 +117,12 @@ class ServiceProvider with ChangeNotifier {
   //Function to create new category to List
   void addNewCategoryPro(
     String categoryName,
+    int order,
     SuperCategoryModel superCategoryModel,
     BuildContext context,
   ) async {
     CategoryModel categoryModel = await ServiceFirebaseFirestore.instance
-        .createCategory(categoryName, superCategoryModel);
+        .createCategory(categoryName, order, superCategoryModel);
     _categoryList.add(categoryModel);
     notifyListeners();
   }
@@ -166,6 +175,7 @@ class ServiceProvider with ChangeNotifier {
     double price,
     int hours,
     int min,
+    int order,
   ) async {
     int _serviceDurationMin = 0;
     Duration _serviceDurMin = Duration(hours: hours, minutes: min);
@@ -177,6 +187,7 @@ class ServiceProvider with ChangeNotifier {
       servicesName,
       price,
       _serviceDurMin.inMinutes,
+      order,
     );
 
     notifyListeners();

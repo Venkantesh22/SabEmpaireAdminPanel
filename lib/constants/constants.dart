@@ -161,10 +161,17 @@ void showInforAlertDialog(
 // Add new Super Category popup Text Field Validation.
 bool addNewSuperCategoryVaildation(
   String superCategoryName,
+  int order,
   BuildContext context,
 ) {
   if (superCategoryName.isEmpty) {
     showBottonMessageError("Enter a Super-Category Name", context);
+    return false;
+  } else if (order is! int) {
+    showBottonMessageError("Order must be an integer", context);
+    return false;
+  } else if (order <= 0) {
+    showBottonMessageError("Order must be a positive integer", context);
     return false;
   } else {
     return true;
@@ -175,9 +182,17 @@ bool addNewSuperCategoryVaildation(
 
 bool addNewCategoryVaildation(
   String categoryName,
+  int order,
+  BuildContext context,
 ) {
   if (categoryName.isEmpty) {
     showMessage("Enter a Category Name");
+    return false;
+  } else if (order is! int) {
+    showBottonMessageError("Order must be an integer", context);
+    return false;
+  } else if (order <= 0) {
+    showBottonMessageError("Order must be a positive integer", context);
     return false;
   } else {
     return true;
@@ -190,6 +205,8 @@ bool addNewServiceVaildation(
   final String price,
   final String hours,
   final String minutes,
+  int order,
+  BuildContext context,
 ) {
   final double? min = double.tryParse(minutes);
   final double? hr = double.tryParse(minutes);
@@ -221,6 +238,12 @@ bool addNewServiceVaildation(
     return false;
   } else if (min == null || min < 0 || min > 59) {
     showMessage("Enter a correct minute.");
+    return false;
+  } else if (order is! int) {
+    showBottonMessageError("Order must be an integer", context);
+    return false;
+  } else if (order <= 0) {
+    showBottonMessageError("Order must be a positive integer", context);
     return false;
   } else {
     return true;

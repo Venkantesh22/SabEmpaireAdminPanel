@@ -5,6 +5,7 @@ class CategoryModel {
   final String? superCategoryName;
   final bool isThreeCategory; // New variable
   final String secondCategoryName; // New variable
+  final int order; // New variable
 
   const CategoryModel({
     required this.id,
@@ -13,6 +14,7 @@ class CategoryModel {
     this.superCategoryName,
     this.isThreeCategory = false, // Default value
     this.secondCategoryName = '', // Default value
+    this.order = 0, // Default value
   });
 
   // Factory method to create a CategoryModel from a JSON map.
@@ -24,6 +26,7 @@ class CategoryModel {
       superCategoryName: json['superCategoryName'],
       isThreeCategory: json['isThreeCategory'] ?? false, // New field
       secondCategoryName: json['secondCategoryName'] ?? '', // New field
+      order: json['order'] ?? 0, // New field
     );
   }
 
@@ -36,6 +39,7 @@ class CategoryModel {
       'superCategoryName': superCategoryName,
       'isThreeCategory': isThreeCategory, // New field
       'secondCategoryName': secondCategoryName, // New field
+      'order': order, // New field
     };
   }
 
@@ -47,6 +51,7 @@ class CategoryModel {
     String? superCategoryName,
     bool? isThreeCategory, // New field
     String? secondCategoryName, // New field
+    int? order, // New field
   }) {
     return CategoryModel(
       id: id ?? this.id,
@@ -56,6 +61,7 @@ class CategoryModel {
       isThreeCategory: isThreeCategory ?? this.isThreeCategory, // New field
       secondCategoryName:
           secondCategoryName ?? this.secondCategoryName, // New field
+      order: order ?? this.order, // New field
     );
   }
 }

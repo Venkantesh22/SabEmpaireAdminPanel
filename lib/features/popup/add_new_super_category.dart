@@ -38,131 +38,149 @@ class _AddNewSuperCategoryState extends State<AddNewSuperCategory> {
     ServiceProvider serviceProvider = Provider.of<ServiceProvider>(context);
     final TextEditingController _superCategoryController =
         TextEditingController();
+    final TextEditingController _orderAtController = TextEditingController();
 
-    return AlertDialog(
-      titlePadding: EdgeInsets.only(
-        left: Dimensions.dimenisonNo20,
-        right: Dimensions.dimenisonNo20,
-        top: Dimensions.dimenisonNo20,
-      ),
-      contentPadding: EdgeInsets.symmetric(
-          horizontal: Dimensions.dimenisonNo20,
-          vertical: Dimensions.dimenisonNo10),
-      actionsPadding: EdgeInsets.symmetric(
-        vertical: Dimensions.dimenisonNo10,
-      ),
-      title: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Center(
+      child: FittedBox(
+        child: AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          titlePadding: EdgeInsets.only(
+            left: Dimensions.dimenisonNo20,
+            right: Dimensions.dimenisonNo20,
+            top: Dimensions.dimenisonNo20,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+              horizontal: Dimensions.dimenisonNo20,
+              vertical: Dimensions.dimenisonNo10),
+          actionsPadding: EdgeInsets.symmetric(
+            vertical: Dimensions.dimenisonNo10,
+          ),
+          title: Column(
             children: [
-              Text(
-                'Add New Super-Category',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: Dimensions.dimenisonNo18,
-                  fontFamily: GoogleFonts.roboto().fontFamily,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.15,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Add New Super-Category',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Dimensions.dimenisonNo18,
+                      fontFamily: GoogleFonts.roboto().fontFamily,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.15,
+                    ),
+                  ),
+                ],
               ),
+              const Divider()
             ],
           ),
-          const Divider()
-        ],
-      ),
-      content: SizedBox(
-        height: Dimensions.dimenisonNo230,
-        child: Column(
-          children: [
-            FormCustomTextField(
-              controller: _superCategoryController,
-              title: "Super Category",
-            ),
-            SizedBox(height: Dimensions.dimenisonNo12),
-            GestureDetector(
-              onTap: chooseImages,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          content: SizedBox(
+            height: Dimensions.dimenisonNo230,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize
+                    .min, // Ensure the column takes only the required space
                 children: [
-                  Container(
-                    height: Dimensions.dimenisonNo140,
-                    width: Dimensions.dimenisonNo150,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade500,
-                      border: Border.all(
-                        color: Colors.grey.shade800,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: selectedImage != null
-                          ? Image.memory(
-                              selectedImage!,
-                              fit: BoxFit.cover,
-                            )
-                          : const Text('Logo Images'),
+                  FormCustomTextField(
+                    controller: _superCategoryController,
+                    title: "Super Category",
+                  ),
+                  SizedBox(height: Dimensions.dimenisonNo12),
+                  FormCustomTextField(
+                    controller: _orderAtController,
+                    title: "Order at",
+                  ),
+                  SizedBox(height: Dimensions.dimenisonNo12),
+                  GestureDetector(
+                    onTap: chooseImages,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: Dimensions.dimenisonNo140,
+                          width: Dimensions.dimenisonNo150,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade500,
+                            border: Border.all(
+                              color: Colors.grey.shade800,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: selectedImage != null
+                                ? Image.memory(
+                                    selectedImage!,
+                                    fit: BoxFit.cover,
+                                  )
+                                : const Text('Logo Images'),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomAuthButton(
+                  buttonWidth: Dimensions.dimenisonNo150,
+                  text: "Cancel",
+                  bgColor: Colors.red,
+                  ontap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                CustomAuthButton(
+                  buttonWidth: Dimensions.dimenisonNo150,
+                  bgColor: Colors.green,
+                  text: "Save",
+                  ontap: () async {
+                    try {
+                      bool isVaildated = addNewSuperCategoryVaildation(
+                          _superCategoryController.text,
+                          int.parse(_orderAtController.text),
+                          context);
+
+                      if (isVaildated) {
+                        if (selectedImage == null) {
+                          showBottonMessageError(
+                              "Please select an image.", context);
+                          return;
+                        }
+
+                        showLoaderDialog(context);
+
+                        await serviceProvider.addNewSuperCategoryPro(
+                            _superCategoryController.text.trim(),
+                            int.parse(_orderAtController.text.trim()),
+                            selectedImage!,
+                            context);
+                        Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.of(context, rootNavigator: true).pop();
+                        showBottonMessage(
+                            "New Super-Category added Successfully", context);
+                      }
+                      // Navigator.of(context, rootNavigator: true).pop();
+                      // Pop any remaining dialogs if needed.
+                    } catch (e) {
+                      // Navigator.of(context, rootNavigator: true).pop();
+                      showBottonMessageError(
+                          "Error creating new Super-Category: ${e.toString()}",
+                          context);
+                    }
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomAuthButton(
-              buttonWidth: Dimensions.dimenisonNo150,
-              text: "Cancel",
-              bgColor: Colors.red,
-              ontap: () {
-                Navigator.pop(context);
-              },
-            ),
-            CustomAuthButton(
-              buttonWidth: Dimensions.dimenisonNo150,
-              bgColor: Colors.green,
-              text: "Save",
-              ontap: () async {
-                try {
-                  bool isVaildated = addNewSuperCategoryVaildation(
-                      _superCategoryController.text, context);
-
-                  if (isVaildated) {
-                    if (selectedImage == null) {
-                      showBottonMessageError(
-                          "Please select an image.", context);
-                      return;
-                    }
-
-                    showLoaderDialog(context);
-
-                    await serviceProvider.addNewSuperCategoryPro(
-                        _superCategoryController.text.trim(),
-                        selectedImage!,
-                        context);
-                    Navigator.of(context, rootNavigator: true).pop();
-                    Navigator.of(context, rootNavigator: true).pop();
-                    showBottonMessage(
-                        "New Super-Category added Successfully", context);
-                  }
-                  // Navigator.of(context, rootNavigator: true).pop();
-                  // Pop any remaining dialogs if needed.
-                } catch (e) {
-                  // Navigator.of(context, rootNavigator: true).pop();
-                  showBottonMessageError(
-                      "Error creating new Super-Category: ${e.toString()}",
-                      context);
-                }
-              },
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

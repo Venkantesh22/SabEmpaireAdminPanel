@@ -55,6 +55,8 @@ class _EditServicePageState extends State<EditServicePage> {
         TextEditingController(text: _serviceDurationInHr.toString());
     final TextEditingController _minController =
         TextEditingController(text: _serviceDurationInMin.toString());
+    final TextEditingController _orderAtController =
+        TextEditingController(text: widget.serviceModel.order.toString());
 
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
@@ -120,6 +122,16 @@ class _EditServicePageState extends State<EditServicePage> {
                   ),
                 ),
                 SizedBox(height: Dimensions.dimenisonNo10),
+                SizedBox(
+                  width: Dimensions.dimenisonNo200,
+                  child: FormCustomTextField(
+                    controller: _orderAtController,
+                    title: "Order",
+                  ),
+                ),
+                SizedBox(
+                  height: Dimensions.dimenisonNo20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -181,11 +193,12 @@ class _EditServicePageState extends State<EditServicePage> {
                     try {
                       showLoaderDialog(context);
                       bool isVaildated = addNewServiceVaildation(
-                        _serviceController.text.trim(),
-                        _priceController.text.trim(),
-                        _hoursController.text.trim(),
-                        _minController.text.trim(),
-                      );
+                          _serviceController.text.trim(),
+                          _priceController.text.trim(),
+                          _hoursController.text.trim(),
+                          _minController.text.trim(),
+                          int.parse(_orderAtController.text.trim()),
+                          context);
 
                       if (isVaildated) {
                         Duration? _serviceDurationMin = Duration(
@@ -196,6 +209,7 @@ class _EditServicePageState extends State<EditServicePage> {
                           servicesName: _serviceController.text.trim(),
                           price: double.parse(_priceController.text.trim()),
                           serviceDurationMin: _serviceDurationMin.inMinutes,
+                          order: int.parse(_orderAtController.text.trim()),
                         );
 
                         serviceProvider.updateSingleServicePro(

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:admin_panel_ak/constants/constants.dart';
@@ -8,7 +7,6 @@ import 'package:admin_panel_ak/utility/color.dart';
 import 'package:admin_panel_ak/utility/dimenison.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AddServicePage extends StatefulWidget {
   @override
@@ -22,6 +20,7 @@ class _AddServicePageState extends State<AddServicePage> {
   final TextEditingController _eIdController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
   final TextEditingController _monthController = TextEditingController();
+  final TextEditingController _orderController = TextEditingController();
 
   bool isLoading = false;
 
@@ -51,17 +50,19 @@ class _AddServicePageState extends State<AddServicePage> {
       final eId = _eIdController.text.trim();
       final year = int.tryParse(_yearController.text.trim()) ?? 0;
       final month = int.tryParse(_monthController.text.trim()) ?? 0;
-
+      final order = int.tryParse(_orderController.text.trim()) ?? 0;
       setState(() {
         isLoading = true;
       });
       ServiceProviderModel serviceProviderModel = ServiceProviderModel(
-          id: "",
-          name: name,
-          descp: desc,
-          eId: eId,
-          yearExperience: year,
-          monthExperience: month);
+        id: "",
+        name: name,
+        descp: desc,
+        eId: eId,
+        yearExperience: year,
+        monthExperience: month,
+        order: order,
+      );
 
       try {
         await FirebaseFirestoreHelper.instance.createServiceProvider(
@@ -97,12 +98,6 @@ class _AddServicePageState extends State<AddServicePage> {
                   onTap: chooseImages,
                   child: CircleAvatar(
                     radius: Dimensions.dimenisonNo50,
-                    // backgroundImage: selectedImage != null
-                    //     ? FileImage(selectedImage!)
-                    //     : null,
-                    // child: selectedImage == null
-                    //     ? Icon(Icons.add_a_photo, size: 50)
-                    //     : null,
                     child: Center(
                       child: selectedImage != null
                           ? Image.memory(
@@ -158,6 +153,19 @@ class _AddServicePageState extends State<AddServicePage> {
                       child: TextFormField(
                         controller: _monthController,
                         decoration: InputDecoration(labelText: 'Months'),
+                        keyboardType: TextInputType.number,
+                        validator: (value) => value != null &&
+                                value.isNotEmpty &&
+                                int.tryParse(value) == null
+                            ? 'Enter a valid number'
+                            : null,
+                      ),
+                    ),
+                    SizedBox(width: Dimensions.dimenisonNo16),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _orderController,
+                        decoration: InputDecoration(labelText: 'Order'),
                         keyboardType: TextInputType.number,
                         validator: (value) => value != null &&
                                 value.isNotEmpty &&

@@ -10,6 +10,7 @@ import 'package:admin_panel_ak/models/service_provider_model/service_provider_mo
 import 'package:admin_panel_ak/models/user_enquiry_model/user_enquiry_model.dart';
 import 'package:admin_panel_ak/models/user_model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseFirestoreHelper {
@@ -406,59 +407,229 @@ class FirebaseFirestoreHelper {
     }
   }
 
-  //! ---------------------- Service FUNCTIONS ----------------------
+  //! ---------------------- SERVICES FUNCTIONS ----------------------
 
-  Future<bool> createServiceProvider(ServiceProviderModel serviceProviderModel,
-      Uint8List? selectedImage, BuildContext context) async {
+  // Future<bool> createServiceProvider(ServiceProviderModel serviceProviderModel,
+  //     Uint8List? selectedImage, BuildContext context) async {
+  //   try {
+  //     String? imgUrl = "no Image";
+  //     DocumentReference<Map<String, dynamic>> docRef =
+  //         _firestore.collection("serviceProvider").doc();
+
+  //     if (selectedImage != null && selectedImage.isNotEmpty) {
+  //       imgUrl = await FirebaseStorageHelper.instance
+  //           .uploadServicePvoviderPicImage(
+  //               serviceProviderModel.eId, selectedImage);
+  //     }
+
+  //     ServiceProviderModel _serviceProvider = serviceProviderModel.copyWith(
+  //       id: docRef.id,
+  //       image: imgUrl,
+  //     );
+
+  //     await docRef.set(_serviceProvider.toJson());
+  //     showBottonMessage("Service Provider created successfully", context);
+  //     return true;
+  //   } catch (e) {
+  //     print('Error: Error creating Service Provider: $e');
+  //     showBottonMessageError("Error creating Service Provider", context);
+  //     rethrow;
+  //   }
+  // }
+  Future<bool> createServiceProvider(
+    ServiceProviderModel serviceProviderModel,
+    Uint8List? selectedImage,
+    BuildContext context,
+  ) async {
     try {
+      // Default image URL if no image is provided.
       String? imgUrl = "no Image";
+
+      // Create a new document reference with an auto-generated ID.
       DocumentReference<Map<String, dynamic>> docRef =
           _firestore.collection("serviceProvider").doc();
 
+      // If a new image is selected, upload it and update imgUrl.
       if (selectedImage != null && selectedImage.isNotEmpty) {
         imgUrl = await FirebaseStorageHelper.instance
             .uploadServicePvoviderPicImage(
                 serviceProviderModel.eId, selectedImage);
       }
 
-      ServiceProviderModel _serviceProvider = serviceProviderModel.copyWith(
+      // Retrieve the current admin UID.
+      // String? adminUid = FirebaseAuth.instance.currentUser?.uid;
+      // if (adminUid == null) {
+      //   throw Exception("User is not logged in");
+      // }
+
+      // Create a new ServiceProviderModel with updated id, adminId, and image.
+      ServiceProviderModel updatedModel = serviceProviderModel.copyWith(
         id: docRef.id,
         image: imgUrl,
       );
 
-      await docRef.set(_serviceProvider.toJson());
+      // Use a Firestore batch for atomicity (even if it's a single write).
+      WriteBatch batch = _firestore.batch();
+      // Query all existing services in the given category whose order is >= the new order.
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection("serviceProvider")
+          .where("order", isGreaterThanOrEqualTo: serviceProviderModel.order)
+          .get();
+
+      for (var doc in snapshot.docs) {
+        int currentOrder = doc.data()['order'] ?? 0;
+        batch.update(doc.reference, {'order': currentOrder + 1});
+      }
+
+      batch.set(docRef, updatedModel.toJson());
+      await batch.commit();
+
       showBottonMessage("Service Provider created successfully", context);
       return true;
     } catch (e) {
-      print('Error: Error creating Service Provider: $e');
+      print('Error creating Service Provider: $e');
       showBottonMessageError("Error creating Service Provider", context);
       rethrow;
     }
   }
 
   Future<bool> updateServiceProvider(
-      ServiceProviderModel serviceProviderModel, BuildContext context) async {
+    ServiceProviderModel serviceProviderModel,
+    BuildContext context, {
+    Uint8List? selectedImage,
+  }) async {
     try {
-      await _firestore
-          .collection("serviceProvider")
-          .doc(serviceProviderModel.id)
-          .update(serviceProviderModel.toJson());
+      // Retrieve current admin UID.
+
+      // Update the image if a new one is provided.
+      String? updatedImage = serviceProviderModel.image;
+      if (selectedImage != null && selectedImage.isNotEmpty) {
+        updatedImage = await FirebaseStorageHelper.instance
+            .updateServicePvoviderPicImage(selectedImage,
+                serviceProviderModel.image!, serviceProviderModel.eId);
+      }
+
+      // Determine the final order: if newOrder is provided, use it; otherwise, use the current order.
+
+      // Create an updated model with the new admin UID, image, and order.
+      ServiceProviderModel updatedModel = serviceProviderModel.copyWith(
+        image: updatedImage,
+      );
+
+      // Create a batch for atomic updates.
+      WriteBatch batch = _firestore.batch();
+      DocumentReference<Map<String, dynamic>> docRef =
+          _firestore.collection("serviceProvider").doc(updatedModel.id);
+
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot = await docRef.get();
+      if (!docSnapshot.exists) {
+        throw Exception("Service not found");
+      }
+      int oldOrder = docSnapshot.data()?['order'] ?? 0;
+      int newOrder = updatedModel.order;
+
+      // If new order is lower than the old order, services between newOrder and oldOrder should be incremented.
+      if (newOrder < oldOrder) {
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+            .collection("serviceProvider")
+            .where('order', isGreaterThanOrEqualTo: newOrder)
+            .where('order', isLessThan: oldOrder)
+            .get();
+        for (var doc in snapshot.docs) {
+          int currentOrder = doc.data()['order'] ?? 0;
+          batch.update(doc.reference, {'order': currentOrder + 1});
+        }
+      } else if (newOrder > oldOrder) {
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+            .collection("serviceProvider")
+            .where('order', isGreaterThan: oldOrder)
+            .where('order', isLessThanOrEqualTo: newOrder)
+            .get();
+        for (var doc in snapshot.docs) {
+          int currentOrder = doc.data()['order'] ?? 0;
+          batch.update(doc.reference, {'order': currentOrder - 1});
+        }
+      }
+
+      batch.update(docRef, updatedModel.toJson());
+
+      // Commit all changes atomically.
+      await batch.commit();
       showBottonMessage("Service Provider updated successfully", context);
+
       return true;
     } catch (e) {
-      print('Error: Error updating Service Provider: $e');
+      print('Error updating Service Provider: $e');
       showBottonMessageError("Error updating Service Provider", context);
       rethrow;
     }
   }
 
+  // Future<bool> updateServiceProvider(
+  //     ServiceProviderModel serviceProviderModel, BuildContext context) async {
+  //   try {
+  //     await _firestore
+  //         .collection("serviceProvider")
+  //         .doc(serviceProviderModel.id)
+  //         .update(serviceProviderModel.toJson());
+  //     showBottonMessage("Service Provider updated successfully", context);
+  //     return true;
+  //   } catch (e) {
+  //     print('Error: Error updating Service Provider: $e');
+  //     showBottonMessageError("Error updating Service Provider", context);
+  //     rethrow;
+  //   }
+  // }
+
+  // Future<bool> deleteServiceProvider(String id, BuildContext context) async {
+  //   try {
+  //     await _firestore.collection("serviceProvider").doc(id).delete();
+  //     showBottonMessage("Service Provider deleted successfully", context);
+  //     return true;
+  //   } catch (e) {
+  //     print('Error: Error deleting Service Provider: $e');
+  //     showBottonMessageError("Error deleting Service Provider", context);
+  //     rethrow;
+  //   }
+  // }
   Future<bool> deleteServiceProvider(String id, BuildContext context) async {
     try {
-      await _firestore.collection("serviceProvider").doc(id).delete();
+      // Get a reference to the service provider document.
+      DocumentReference<Map<String, dynamic>> providerRef =
+          _firestore.collection("serviceProvider").doc(id);
+
+      // Fetch the document to determine its current order.
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await providerRef.get();
+      if (!docSnapshot.exists) {
+        throw Exception("Service Provider not found");
+      }
+      int deletedOrder = docSnapshot.data()?['order'] ?? 0;
+
+      // Start a batch write.
+      WriteBatch batch = _firestore.batch();
+
+      // Delete the service provider document.
+      batch.delete(providerRef);
+
+      // Query all service providers with order greater than the deleted provider's order.
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection("serviceProvider")
+          .where('order', isGreaterThan: deletedOrder)
+          .get();
+
+      // For each document, decrement its order by 1.
+      for (var doc in snapshot.docs) {
+        int currentOrder = doc.data()['order'] ?? 0;
+        batch.update(doc.reference, {'order': currentOrder - 1});
+      }
+
+      // Commit the batch.
+      await batch.commit();
       showBottonMessage("Service Provider deleted successfully", context);
       return true;
     } catch (e) {
-      print('Error: Error deleting Service Provider: $e');
+      print('Error deleting Service Provider: $e');
       showBottonMessageError("Error deleting Service Provider", context);
       rethrow;
     }

@@ -22,6 +22,10 @@ class _UserEnquiryPageState extends State<UserEnquiryPage> {
     userEnquiryList =
         await FirebaseFirestoreHelper.instance.getListUserEnquiryForm(context);
 
+    // Sort the list by dateAndTime in descending order
+    userEnquiryList.sort((a, b) =>
+        b.timeStampModel.dateAndTime.compareTo(a.timeStampModel.dateAndTime));
+
     setState(() {
       _isLoading = false;
     });

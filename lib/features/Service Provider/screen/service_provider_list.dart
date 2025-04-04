@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:typed_data';
 import 'package:admin_panel_ak/constants/constants.dart';
 import 'package:admin_panel_ak/firebase_helper/firebase_firestore_helper/firebase_firestore.dart';
@@ -21,6 +23,7 @@ class _ServiceProviderListState extends State<ServiceProviderList> {
   final TextEditingController _eIdController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
   final TextEditingController _monthController = TextEditingController();
+  final TextEditingController _orderController = TextEditingController();
 
   bool isLoading = false;
   bool isImageIsChange = false;
@@ -47,6 +50,7 @@ class _ServiceProviderListState extends State<ServiceProviderList> {
         _eIdController.text = serviceProviderModel.eId;
         _yearController.text = serviceProviderModel.yearExperience.toString();
         _monthController.text = serviceProviderModel.monthExperience.toString();
+        _orderController.text = serviceProviderModel.order.toString();
 
         // Function to choose a new image.
         Future<void> chooseImages() async {
@@ -81,6 +85,7 @@ class _ServiceProviderListState extends State<ServiceProviderList> {
                 eId: _eIdController.text.trim(),
                 yearExperience: int.parse(_yearController.text.trim()),
                 monthExperience: int.parse(_monthController.text.trim()),
+                order: int.parse(_orderController.text.trim()),
                 image: oldModel.image, // retain the existing image
               );
 
@@ -100,6 +105,7 @@ class _ServiceProviderListState extends State<ServiceProviderList> {
                 eId: _eIdController.text.trim(),
                 yearExperience: int.parse(_yearController.text.trim()),
                 monthExperience: int.parse(_monthController.text.trim()),
+                order: int.parse(_orderController.text.trim()),
                 image: updatedImageUrl,
               );
 
@@ -220,6 +226,19 @@ class _ServiceProviderListState extends State<ServiceProviderList> {
                                 : null,
                           ),
                         ),
+                        SizedBox(width: Dimensions.dimenisonNo16),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _orderController,
+                            decoration: InputDecoration(labelText: 'Order'),
+                            keyboardType: TextInputType.number,
+                            validator: (value) => value != null &&
+                                    value.isNotEmpty &&
+                                    int.tryParse(value) == null
+                                ? 'Enter a valid number'
+                                : null,
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: Dimensions.dimenisonNo16),
@@ -270,7 +289,8 @@ class _ServiceProviderListState extends State<ServiceProviderList> {
           final serviceProviders = snapshot.data!.docs
               .map((doc) => ServiceProviderModel.fromJson(
                   doc.data() as Map<String, dynamic>))
-              .toList();
+              .toList()
+            ..sort((a, b) => a.order.compareTo(b.order)); // Sort by order
 
           return ListView.builder(
             itemCount: serviceProviders.length,
@@ -279,9 +299,26 @@ class _ServiceProviderListState extends State<ServiceProviderList> {
               return Card(
                 margin: EdgeInsets.all(Dimensions.dimenisonNo8),
                 child: ListTile(
-                  leading: provider.image != null
-                      ? Image.network(provider.image!)
-                      : Icon(Icons.person),
+                  leading: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(provider.order.toString()),
+                      SizedBox(width: 2),
+                      (provider.image != null && provider.image!.isNotEmpty)
+                          ? Image.network(
+                              provider.image!,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Icon(Icons.person,
+                                    size: Dimensions.dimenisonNo30,
+                                    color: Colors.grey);
+                              },
+                            )
+                          : Icon(Icons.person,
+                              size: Dimensions.dimenisonNo30,
+                              color: Colors.grey),
+                    ],
+                  ),
                   title: Text(provider.name),
                   subtitle: Text(
                       '${provider.descp}\nExperience: ${provider.yearExperience} years, ${provider.monthExperience} months'),

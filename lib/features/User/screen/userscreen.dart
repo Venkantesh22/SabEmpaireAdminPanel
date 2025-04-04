@@ -35,6 +35,8 @@ class _UserScreenState extends State<UserScreen> {
           }
 
           final users = snapshot.data!;
+          users.sort((a, b) => b.timeStampModel.dateAndTime
+              .compareTo(a.timeStampModel.dateAndTime));
           return ListView.builder(
             itemCount: users.length,
             itemBuilder: (context, index) {

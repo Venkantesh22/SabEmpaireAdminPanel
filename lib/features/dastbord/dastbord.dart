@@ -5,6 +5,7 @@ import 'package:admin_panel_ak/features/Service%20Provider/screen/service_provid
 import 'package:admin_panel_ak/features/User/screen/userscreen.dart';
 import 'package:admin_panel_ak/features/appoint/Appoint%20List/appoint_list.dart';
 import 'package:admin_panel_ak/features/appoint/add_appoint/screen/add_new_appointment.dart';
+import 'package:admin_panel_ak/features/auth/screen/login.dart';
 import 'package:admin_panel_ak/features/auth/screen/signup.dart';
 import 'package:admin_panel_ak/features/banner_section/screen/banner_page.dart';
 import 'package:admin_panel_ak/features/banner_section/screen/mobile_banner_page.dart';
@@ -256,7 +257,7 @@ class _HomePageState extends State<HomeDashBord> {
           onPressed: () {
             try {
               FirebaseAuthHelper.instance.signOut();
-              Routes.instance.push(widget: SignupPage(), context: context);
+              Routes.instance.push(widget: LogingPage(), context: context);
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

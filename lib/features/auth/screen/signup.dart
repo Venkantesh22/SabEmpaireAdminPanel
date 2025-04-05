@@ -28,6 +28,7 @@ class _SignupPageState extends State<SignupPage> {
   String confirmPassword = '';
 
   bool isLoading = false;
+  bool _obscurePassword = true; // Add this state variable
 
   @override
   Widget build(BuildContext context) {
@@ -135,8 +136,22 @@ class _SignupPageState extends State<SignupPage> {
                               // Password field
                               TextFormField(
                                 style: InputTextDec(),
-                                decoration: authTextBoxDec('Password'),
-                                obscureText: true,
+                                decoration: authTextBoxDec('Password').copyWith(
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      color: Colors.white.withAlpha(128),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscurePassword = !_obscurePassword;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                obscureText: _obscurePassword,
                                 onChanged: (value) => password = value,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {

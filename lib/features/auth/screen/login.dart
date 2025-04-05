@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:admin_panel_ak/constants/constants.dart';
 import 'package:admin_panel_ak/constants/router.dart';
 import 'package:admin_panel_ak/features/auth/screen/signup.dart';
 import 'package:admin_panel_ak/features/dastbord/dastbord.dart';
@@ -30,6 +31,7 @@ class _LogingPageState extends State<LogingPage> {
   }
 
   bool isloading = false;
+  bool saveloading = false;
   Future<void> getDate() async {
     setState(() {
       isloading = true;
@@ -47,6 +49,8 @@ class _LogingPageState extends State<LogingPage> {
   String email = '';
 
   String password = '';
+
+  bool _obscureText = true; // Add this state variable
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +137,24 @@ class _LogingPageState extends State<LogingPage> {
                                       // Password field
                                       TextFormField(
                                         style: InputTextDec(),
-                                        decoration: authTextBoxDec('Password'),
-                                        obscureText: true,
+                                        decoration:
+                                            authTextBoxDec('Password').copyWith(
+                                          suffixIcon: IconButton(
+                                            icon: Icon(
+                                              _obscureText
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color:
+                                                  Colors.white.withAlpha(128),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                _obscureText = !_obscureText;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        obscureText: _obscureText,
                                         onChanged: (value) => password = value,
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
@@ -153,26 +173,46 @@ class _LogingPageState extends State<LogingPage> {
                                       SizedBox(
                                         width: double.infinity,
                                         child: ElevatedButton(
-                                          onPressed: () async {
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              // If the form is valid, navigate to the home page.
-                                              bool isLogined =
-                                                  await FirebaseAuthHelper
-                                                      .instance
-                                                      .login(email, password,
-                                                          context);
+                                          onPressed: saveloading
+                                              ? null
+                                              : () async {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    setState(() {
+                                                      saveloading = true;
+                                                    });
+                                                    try {
+                                                      // If the form is valid, navigate to the home page.
+                                                      bool isLogined =
+                                                          await FirebaseAuthHelper
+                                                              .instance
+                                                              .login(
+                                                                  email,
+                                                                  password,
+                                                                  context);
 
-                                              if (isLogined) {
-                                                print(
-                                                    'login Successful for:  $email');
-                                                Routes.instance
-                                                    .pushAndRemoveUntil(
-                                                        widget: HomeDashBord(),
-                                                        context: context);
-                                              }
-                                            }
-                                          },
+                                                      if (isLogined) {
+                                                        print(
+                                                            'login Successful for:  $email');
+                                                        Routes.instance
+                                                            .pushAndRemoveUntil(
+                                                                widget:
+                                                                    HomeDashBord(),
+                                                                context:
+                                                                    context);
+                                                      }
+                                                    } catch (e) {
+                                                      if (!mounted) return;
+                                                      showBottonMessageError(
+                                                          "Error: ${e.toString()}",
+                                                          context);
+                                                    } finally {
+                                                      setState(() {
+                                                        saveloading = false;
+                                                      });
+                                                    }
+                                                  }
+                                                },
                                           style: ElevatedButton.styleFrom(
                                             padding: EdgeInsets.symmetric(
                                                 vertical:
@@ -185,18 +225,22 @@ class _LogingPageState extends State<LogingPage> {
                                                       Dimensions.dimenisonNo12),
                                             ), // Match this with your Figma button color
                                           ),
-                                          child: Text(
-                                            'Login',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  Dimensions.dimenisonNo16,
-                                              fontFamily: GoogleFonts.inter()
-                                                  .fontFamily,
-                                              fontWeight: FontWeight.w600,
-                                              height: 1.50,
-                                            ),
-                                          ),
+                                          child: saveloading
+                                              ? const CircularProgressIndicator(
+                                                  color: Colors.white)
+                                              : Text(
+                                                  'Login',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: Dimensions
+                                                        .dimenisonNo16,
+                                                    fontFamily:
+                                                        GoogleFonts.inter()
+                                                            .fontFamily,
+                                                    fontWeight: FontWeight.w600,
+                                                    height: 1.50,
+                                                  ),
+                                                ),
                                         ),
                                       ),
                                       SizedBox(

@@ -7,9 +7,9 @@ import 'package:admin_panel_ak/features/appoint/add_appoint/widget/single_servic
 import 'package:admin_panel_ak/features/appoint/add_appoint/widget/time_tap.dart';
 import 'package:admin_panel_ak/features/dastbord/dastbord.dart';
 import 'package:admin_panel_ak/firebase_helper/firebase_firestore_helper/appoint_booking.dart';
-import 'package:admin_panel_ak/models/appointModel/appoint_model.dart';
-import 'package:admin_panel_ak/models/user_model/user_model.dart';
+
 import 'package:admin_panel_ak/provider/bookingProvider.dart';
+import 'package:admin_panel_ak/utility/responsive_layout.dart';
 import 'package:admin_panel_ak/widget/button/customauthbutton.dart';
 import 'package:admin_panel_ak/widget/text_box/customtextfield.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,6 @@ import 'package:provider/provider.dart';
 import 'package:admin_panel_ak/constants/constants.dart';
 import 'package:admin_panel_ak/constants/global_variable.dart';
 import 'package:admin_panel_ak/models/service_model/service_model.dart';
-import 'package:admin_panel_ak/models/timestamp_model/timestamp_model.dart';
 import 'package:admin_panel_ak/utility/color.dart';
 import 'package:admin_panel_ak/utility/dimenison.dart';
 
@@ -245,43 +244,6 @@ class _AddNewAppointmentState extends State<AddNewAppointment> {
     }
   }
 
-  // void _generateTimeSlots(int serviceDurationInMinutes) {
-  //   if (_startTime != null && _endTime != null) {
-  //     DateTime currentTime = _startTime!;
-  //     _categorizedTimeSlots.forEach((key, value) => value.clear());
-
-  //     while (currentTime.isBefore(_endTime!)) {
-  //       final slotEndTime =
-  //           currentTime.add(Duration(minutes: serviceDurationInMinutes));
-
-  //       // Display only the time part, ignoring the date
-  //       String formattedTime = DateFormat('hh:mm a').format(currentTime);
-
-  //       if (currentTime.hour < 12) {
-  //         _categorizedTimeSlots['Morning']!.add(formattedTime);
-  //       } else if (currentTime.hour < 17) {
-  //         _categorizedTimeSlots['Afternoon']!.add(formattedTime);
-  //       } else if (currentTime.hour < 21) {
-  //         _categorizedTimeSlots['Evening']!.add(formattedTime);
-  //       } else {
-  //         _categorizedTimeSlots['Night']!.add(formattedTime);
-  //       }
-
-  //       // Move to the next time slot
-  //       currentTime = currentTime.add(
-  //           Duration(minutes: _timediff)); // Adjust as neededjust as needed
-  //       // currentTime = currentTime
-  //       //     .add(Duration(minutes: 30)); // Adjust as neededjust as needed
-  //     }
-
-  //     // Ensure the last slot includes the closing time
-  //     String lastSlotFormattedTime = DateFormat('hh:mm a').format(_endTime!);
-  //     if (_categorizedTimeSlots['Night']!.last != lastSlotFormattedTime) {
-  //       _categorizedTimeSlots['Night']!.add(lastSlotFormattedTime);
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     BookingProvider bookingProvider = Provider.of<BookingProvider>(context);
@@ -341,293 +303,7 @@ class _AddNewAppointmentState extends State<AddNewAppointment> {
                                         Dimensions.dimenisonNo8),
                                   ),
                                   child: Center(
-                                    child: Column(
-                                      children: [
-                                        // User Name textbox
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            SizedBox(
-                                              height: Dimensions.dimenisonNo70,
-                                              width: Dimensions.dimenisonNo250,
-                                              child: FormCustomTextField(
-                                                requiredField: false,
-                                                controller: _nameController,
-                                                title: "First Name",
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: Dimensions.dimenisonNo30,
-                                            ),
-                                            //! User last Name textbox
-
-                                            SizedBox(
-                                              height: Dimensions.dimenisonNo70,
-                                              width: Dimensions.dimenisonNo250,
-                                              child: FormCustomTextField(
-                                                requiredField: false,
-                                                controller: _lastNameController,
-                                                title: "Last Name",
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: Dimensions.dimenisonNo30,
-                                            ),
-                                            //! select Date text box
-                                            SizedBox(
-                                              height: Dimensions.dimenisonNo70,
-                                              width: Dimensions.dimenisonNo250,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Appointment Date",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: Dimensions
-                                                          .dimenisonNo18,
-                                                      fontFamily:
-                                                          GoogleFonts.roboto()
-                                                              .fontFamily,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      letterSpacing: 0.90,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        Dimensions.dimenisonNo5,
-                                                  ),
-                                                  SizedBox(
-                                                    height: Dimensions
-                                                        .dimenisonNo30,
-                                                    width: Dimensions
-                                                        .dimenisonNo250,
-                                                    child: TextFormField(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          _showCalender =
-                                                              !_showCalender;
-                                                        });
-                                                        print(_showCalender);
-                                                      },
-                                                      readOnly: true,
-                                                      cursorHeight: Dimensions
-                                                          .dimenisonNo16,
-                                                      style: TextStyle(
-                                                          fontSize: Dimensions
-                                                              .dimenisonNo12,
-                                                          fontFamily:
-                                                              GoogleFonts
-                                                                      .roboto()
-                                                                  .fontFamily,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black),
-                                                      controller:
-                                                          _appointmentDateController,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        contentPadding: EdgeInsets.symmetric(
-                                                            horizontal: Dimensions
-                                                                .dimenisonNo10,
-                                                            vertical: Dimensions
-                                                                .dimenisonNo10),
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius: BorderRadius
-                                                              .circular(Dimensions
-                                                                  .dimenisonNo16),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        //! Search box for Services  text box
-
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            SizedBox(
-                                              height: Dimensions.dimenisonNo70,
-                                              width: Dimensions.dimenisonNo250,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Service",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: Dimensions
-                                                          .dimenisonNo18,
-                                                      fontFamily:
-                                                          GoogleFonts.roboto()
-                                                              .fontFamily,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      letterSpacing: 0.90,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        Dimensions.dimenisonNo5,
-                                                  ),
-                                                  SizedBox(
-                                                    height: Dimensions
-                                                        .dimenisonNo30,
-                                                    width: Dimensions
-                                                        .dimenisonNo250,
-                                                    child: TextFormField(
-                                                      onChanged:
-                                                          (String value) {
-                                                        serchService(value);
-                                                        _showServiceList = true;
-                                                      },
-                                                      onTap: () {
-                                                        setState(() {
-                                                          _showServiceList =
-                                                              !_showServiceList;
-                                                        });
-                                                      },
-                                                      cursorHeight: Dimensions
-                                                          .dimenisonNo16,
-                                                      style: TextStyle(
-                                                          fontSize: Dimensions
-                                                              .dimenisonNo12,
-                                                          fontFamily:
-                                                              GoogleFonts
-                                                                      .roboto()
-                                                                  .fontFamily,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black),
-                                                      controller:
-                                                          _serviceController,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        hintText:
-                                                            "Search Service...",
-                                                        contentPadding: EdgeInsets.symmetric(
-                                                            horizontal: Dimensions
-                                                                .dimenisonNo10,
-                                                            vertical: Dimensions
-                                                                .dimenisonNo10),
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius: BorderRadius
-                                                              .circular(Dimensions
-                                                                  .dimenisonNo16),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: Dimensions.dimenisonNo30,
-                                            ),
-                                            //! mobile text box
-                                            SizedBox(
-                                              height: Dimensions.dimenisonNo70,
-                                              width: Dimensions.dimenisonNo250,
-                                              child: FormCustomTextField(
-                                                requiredField: false,
-                                                controller: _mobileController,
-                                                title: "Mobile No",
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: Dimensions.dimenisonNo30,
-                                            ),
-
-                                            //! select time textbox
-                                            SizedBox(
-                                              height: Dimensions.dimenisonNo70,
-                                              width: Dimensions.dimenisonNo250,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Time",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: Dimensions
-                                                          .dimenisonNo18,
-                                                      fontFamily:
-                                                          GoogleFonts.roboto()
-                                                              .fontFamily,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      letterSpacing: 0.90,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        Dimensions.dimenisonNo5,
-                                                  ),
-                                                  SizedBox(
-                                                    height: Dimensions
-                                                        .dimenisonNo30,
-                                                    width: Dimensions
-                                                        .dimenisonNo250,
-                                                    child: TextFormField(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          _showTimeContaine =
-                                                              !_showTimeContaine;
-                                                          print(
-                                                              "Time : $_showTimeContaine");
-                                                        });
-                                                      },
-                                                      cursorHeight: Dimensions
-                                                          .dimenisonNo16,
-                                                      style: TextStyle(
-                                                          fontSize: Dimensions
-                                                              .dimenisonNo12,
-                                                          fontFamily:
-                                                              GoogleFonts
-                                                                      .roboto()
-                                                                  .fontFamily,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black),
-                                                      controller:
-                                                          _appointmentTimeController,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        contentPadding: EdgeInsets.symmetric(
-                                                            horizontal: Dimensions
-                                                                .dimenisonNo10,
-                                                            vertical: Dimensions
-                                                                .dimenisonNo10),
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius: BorderRadius
-                                                              .circular(Dimensions
-                                                                  .dimenisonNo16),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        // SizedBox(height: Dimensions.dimenisonNo16),
-                                      ],
-                                    ),
+                                    child: textbox(),
                                   ),
                                 ),
                                 //! Genarate List of Service which in Watch list
@@ -936,6 +612,441 @@ class _AddNewAppointmentState extends State<AddNewAppointment> {
               ),
             ),
     );
+  }
+
+  Column textbox() {
+    return ResponsiveLayout.isTablet(context)
+        ? Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: FormCustomTextField(
+                      requiredField: false,
+                      controller: _nameController,
+                      title: "First Name",
+                    ),
+                  ),
+                  SizedBox(
+                    width: Dimensions.dimenisonNo30,
+                  ),
+                  //! User last Name textbox
+
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: FormCustomTextField(
+                      requiredField: false,
+                      controller: _lastNameController,
+                      title: "Last Name",
+                    ),
+                  ),
+                  SizedBox(
+                    width: Dimensions.dimenisonNo30,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //! select Date text box
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Appointment Date",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Dimensions.dimenisonNo18,
+                            fontFamily: GoogleFonts.roboto().fontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.90,
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo5,
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo30,
+                          width: Dimensions.dimenisonNo250,
+                          child: TextFormField(
+                            onTap: () {
+                              setState(() {
+                                _showCalender = !_showCalender;
+                              });
+                              print(_showCalender);
+                            },
+                            readOnly: true,
+                            cursorHeight: Dimensions.dimenisonNo16,
+                            style: TextStyle(
+                                fontSize: Dimensions.dimenisonNo12,
+                                fontFamily: GoogleFonts.roboto().fontFamily,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            controller: _appointmentDateController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.dimenisonNo10,
+                                  vertical: Dimensions.dimenisonNo10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.dimenisonNo16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Service",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Dimensions.dimenisonNo18,
+                            fontFamily: GoogleFonts.roboto().fontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.90,
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo5,
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo30,
+                          width: Dimensions.dimenisonNo250,
+                          child: TextFormField(
+                            onChanged: (String value) {
+                              serchService(value);
+                              _showServiceList = true;
+                            },
+                            onTap: () {
+                              setState(() {
+                                _showServiceList = !_showServiceList;
+                              });
+                            },
+                            cursorHeight: Dimensions.dimenisonNo16,
+                            style: TextStyle(
+                                fontSize: Dimensions.dimenisonNo12,
+                                fontFamily: GoogleFonts.roboto().fontFamily,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            controller: _serviceController,
+                            decoration: InputDecoration(
+                              hintText: "Search Service...",
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.dimenisonNo10,
+                                  vertical: Dimensions.dimenisonNo10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.dimenisonNo16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //! mobile text box
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: FormCustomTextField(
+                      requiredField: false,
+                      controller: _mobileController,
+                      title: "Mobile No",
+                    ),
+                  ),
+                  //! select time textbox
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Time",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Dimensions.dimenisonNo18,
+                            fontFamily: GoogleFonts.roboto().fontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.90,
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo5,
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo30,
+                          width: Dimensions.dimenisonNo250,
+                          child: TextFormField(
+                            onTap: () {
+                              setState(() {
+                                _showTimeContaine = !_showTimeContaine;
+                                print("Time : $_showTimeContaine");
+                              });
+                            },
+                            cursorHeight: Dimensions.dimenisonNo16,
+                            style: TextStyle(
+                                fontSize: Dimensions.dimenisonNo12,
+                                fontFamily: GoogleFonts.roboto().fontFamily,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            controller: _appointmentTimeController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.dimenisonNo10,
+                                  vertical: Dimensions.dimenisonNo10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.dimenisonNo16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ],
+          )
+        : Column(
+            children: [
+              // User Name textbox
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: FormCustomTextField(
+                      requiredField: false,
+                      controller: _nameController,
+                      title: "First Name",
+                    ),
+                  ),
+                  SizedBox(
+                    width: Dimensions.dimenisonNo30,
+                  ),
+                  //! User last Name textbox
+
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: FormCustomTextField(
+                      requiredField: false,
+                      controller: _lastNameController,
+                      title: "Last Name",
+                    ),
+                  ),
+                  SizedBox(
+                    width: Dimensions.dimenisonNo30,
+                  ),
+                  //! select Date text box
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Appointment Date",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Dimensions.dimenisonNo18,
+                            fontFamily: GoogleFonts.roboto().fontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.90,
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo5,
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo30,
+                          width: Dimensions.dimenisonNo250,
+                          child: TextFormField(
+                            onTap: () {
+                              setState(() {
+                                _showCalender = !_showCalender;
+                              });
+                              print(_showCalender);
+                            },
+                            readOnly: true,
+                            cursorHeight: Dimensions.dimenisonNo16,
+                            style: TextStyle(
+                                fontSize: Dimensions.dimenisonNo12,
+                                fontFamily: GoogleFonts.roboto().fontFamily,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            controller: _appointmentDateController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.dimenisonNo10,
+                                  vertical: Dimensions.dimenisonNo10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.dimenisonNo16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              //! Search box for Services  text box
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Service",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Dimensions.dimenisonNo18,
+                            fontFamily: GoogleFonts.roboto().fontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.90,
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo5,
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo30,
+                          width: Dimensions.dimenisonNo250,
+                          child: TextFormField(
+                            onChanged: (String value) {
+                              serchService(value);
+                              _showServiceList = true;
+                            },
+                            onTap: () {
+                              setState(() {
+                                _showServiceList = !_showServiceList;
+                              });
+                            },
+                            cursorHeight: Dimensions.dimenisonNo16,
+                            style: TextStyle(
+                                fontSize: Dimensions.dimenisonNo12,
+                                fontFamily: GoogleFonts.roboto().fontFamily,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            controller: _serviceController,
+                            decoration: InputDecoration(
+                              hintText: "Search Service...",
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.dimenisonNo10,
+                                  vertical: Dimensions.dimenisonNo10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.dimenisonNo16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: Dimensions.dimenisonNo30,
+                  ),
+                  //! mobile text box
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: FormCustomTextField(
+                      requiredField: false,
+                      controller: _mobileController,
+                      title: "Mobile No",
+                    ),
+                  ),
+                  SizedBox(
+                    width: Dimensions.dimenisonNo30,
+                  ),
+
+                  //! select time textbox
+                  SizedBox(
+                    height: Dimensions.dimenisonNo70,
+                    width: Dimensions.dimenisonNo250,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Time",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Dimensions.dimenisonNo18,
+                            fontFamily: GoogleFonts.roboto().fontFamily,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.90,
+                          ),
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo5,
+                        ),
+                        SizedBox(
+                          height: Dimensions.dimenisonNo30,
+                          width: Dimensions.dimenisonNo250,
+                          child: TextFormField(
+                            onTap: () {
+                              setState(() {
+                                _showTimeContaine = !_showTimeContaine;
+                                print("Time : $_showTimeContaine");
+                              });
+                            },
+                            cursorHeight: Dimensions.dimenisonNo16,
+                            style: TextStyle(
+                                fontSize: Dimensions.dimenisonNo12,
+                                fontFamily: GoogleFonts.roboto().fontFamily,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            controller: _appointmentTimeController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.dimenisonNo10,
+                                  vertical: Dimensions.dimenisonNo10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.dimenisonNo16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              // SizedBox(height: Dimensions.dimenisonNo16),
+            ],
+          );
   }
 
   Container priceSection(

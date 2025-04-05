@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:admin_panel_ak/constants/constants.dart';
+import 'package:admin_panel_ak/constants/global_variable.dart';
 import 'package:admin_panel_ak/constants/router.dart';
 import 'package:admin_panel_ak/features/auth/screen/signup.dart';
 import 'package:admin_panel_ak/features/dastbord/dastbord.dart';
@@ -63,7 +64,7 @@ class _LogingPageState extends State<LogingPage> {
         title: Padding(
           padding: EdgeInsets.all(Dimensions.dimenisonNo5),
           child: Image.asset(
-            'assets/images/sabWithBea.jpg',
+            GlobalVariable.LogWithOutBeuText,
             height: Dimensions.dimenisonNo50,
             fit: BoxFit.fitWidth,
             filterQuality: FilterQuality.high, // Ensures high-quality scaling

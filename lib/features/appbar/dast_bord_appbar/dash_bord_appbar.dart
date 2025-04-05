@@ -1,3 +1,4 @@
+import 'package:admin_panel_ak/constants/global_variable.dart';
 import 'package:admin_panel_ak/utility/color.dart';
 import 'package:admin_panel_ak/utility/dimenison.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ class _LoadAppBarState extends State<DashBordAppBar> {
       title: Padding(
         padding: EdgeInsets.all(Dimensions.dimenisonNo5),
         child: Image.asset(
-          'assets/images/sabWithBea.jpg',
+          GlobalVariable.LogWithOutBeuText,
+
           height: Dimensions.dimenisonNo50,
           fit: BoxFit.fitWidth,
           filterQuality: FilterQuality.high, // Ensures high-quality scaling

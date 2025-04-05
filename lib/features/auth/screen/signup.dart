@@ -1,4 +1,5 @@
 import 'package:admin_panel_ak/constants/constants.dart';
+import 'package:admin_panel_ak/constants/global_variable.dart';
 import 'package:admin_panel_ak/constants/router.dart';
 import 'package:admin_panel_ak/features/auth/screen/login.dart';
 import 'package:admin_panel_ak/features/dastbord/dastbord.dart';
@@ -43,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
           title: Padding(
             padding: EdgeInsets.all(Dimensions.dimenisonNo5),
             child: Image.asset(
-              'assets/images/sabWithBea.jpg',
+              GlobalVariable.LogWithOutBeuText,
               height: Dimensions.dimenisonNo50,
               fit: BoxFit.fitWidth,
               filterQuality: FilterQuality.high,

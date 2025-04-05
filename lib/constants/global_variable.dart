@@ -99,4 +99,7 @@ class GlobalVariable {
   static TimeOfDay openTime = TimeOfDay(hour: 09, minute: 00);
   static TimeOfDay closeTime = TimeOfDay(hour: 18, minute: 00);
   static String getServiceBookingDuration = "30";
+
+  static String LogWithBeuText = 'assets/images/sabWithBea.jpg';
+  static String LogWithOutBeuText = 'assets/images/sab.jpg';
 }

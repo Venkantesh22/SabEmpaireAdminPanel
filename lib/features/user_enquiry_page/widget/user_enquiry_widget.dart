@@ -1,4 +1,6 @@
 import 'package:admin_panel_ak/constants/constants.dart';
+import 'package:admin_panel_ak/constants/router.dart';
+import 'package:admin_panel_ak/features/appoint/add_appoint/screen/add_new_appointment.dart';
 import 'package:admin_panel_ak/firebase_helper/firebase_firestore_helper/firebase_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -188,7 +190,11 @@ class _UserEnquiryWidgetState extends State<UserEnquiryWidget> {
                         children: [
                           CustomButton(
                             text: 'Add Appointment',
-                            ontap: () {},
+                            ontap: () {
+                              Routes.instance.push(
+                                  widget: AddNewAppointment(),
+                                  context: context);
+                            },
                             buttonColor: AppColor.buttonRedColor,
                           ),
                           SizedBox(

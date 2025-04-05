@@ -19,8 +19,6 @@ class FirebaseAuthHelper {
   Future<bool> login(
       String email, String password, BuildContext context) async {
     try {
-      showLoaderDialog(context);
-
       // Sign in using Firebase Authentication
       await _auth.signInWithEmailAndPassword(email: email, password: password);
 
@@ -41,19 +39,15 @@ class FirebaseAuthHelper {
 
       // Verify the provided password against the stored hash using BCrypt
       if (!BCrypt.checkpw(password, storedHashedPassword)) {
-        Navigator.of(context, rootNavigator: true).pop();
         showMessage("Password verification failed");
         return false;
       }
 
-      Navigator.of(context, rootNavigator: true).pop();
       return true;
     } on FirebaseAuthException catch (error) {
-      Navigator.of(context, rootNavigator: true).pop();
       showMessage(error.code.toString());
       return false;
     } catch (e) {
-      Navigator.of(context, rootNavigator: true).pop();
       showMessage("Error occurred during login: $e");
       print("Error occurred during login: $e");
       return false;

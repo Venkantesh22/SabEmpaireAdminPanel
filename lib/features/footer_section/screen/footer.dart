@@ -45,226 +45,210 @@ class Footer extends StatelessWidget {
       );
     }
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: Dimensions.dimenisonNo12,
-        horizontal: Dimensions.dimenisonNo8,
-      ),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Column 1: Logo and Address
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Image.asset(
-                        GlobalVariable.LogWithBeuText,
-                        height: Dimensions.dimenisonNo80,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    SizedBox(height: Dimensions.dimenisonNo12),
-                    Text(
-                      footerModel.address,
-                      overflow: TextOverflow.fade,
-                      style: TextStyle(
-                        fontSize: Dimensions.dimenisonNo10,
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: Dimensions.dimenisonNo16,
-              ),
+    return Container(
+      color: Colors.black,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: Dimensions.dimenisonNo12,
+          horizontal: Dimensions.dimenisonNo8,
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(width: Dimensions.dimenisonNo12),
 
-              // Column 2: About Us
-              Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "About Us",
-                      style: TextStyle(
-                        fontSize: Dimensions.dimenisonNo18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: Dimensions.dimenisonNo20),
-                    Text(
-                      footerModel.about,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.justify,
-                      // maxLines: 6,
-                      style: TextStyle(
-                        fontSize: Dimensions.dimenisonNo10,
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: Dimensions.dimenisonNo12,
-              ),
-
-              // Column 3: Service Cities
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Service Cities",
-                      style: TextStyle(
-                        fontSize: Dimensions.dimenisonNo18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: Dimensions.dimenisonNo16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: footerModel.city.map((city) {
-                        return Padding(
-                          padding:
-                              EdgeInsets.only(bottom: Dimensions.dimenisonNo8),
-                          child: Text(
-                            city,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Column 4: Contact Us
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Contact Us",
-                      style: TextStyle(
-                        fontSize: Dimensions.dimenisonNo18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: Dimensions.dimenisonNo16),
-                    Row(
-                      children: [
-                        Icon(Icons.phone,
-                            size: Dimensions.dimenisonNo16,
-                            color: Colors.white),
-                        SizedBox(width: Dimensions.dimenisonNo8),
-                        Flexible(
-                          child: Text(
-                            footerModel.mobileNo,
-                            style: TextStyle(
-                              fontSize: Dimensions.dimenisonNo14,
-                              color: Colors.white,
-                            ),
-                          ),
+                // Column 1: Logo and Address
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Image.asset(
+                          GlobalVariable.LogWithBeuText,
+                          height: Dimensions.dimenisonNo80,
+                          fit: BoxFit.contain,
                         ),
-                      ],
-                    ),
-                    SizedBox(height: Dimensions.dimenisonNo16),
-                    Row(
-                      children: [
-                        Icon(Icons.phone,
-                            size: Dimensions.dimenisonNo16,
-                            color: Colors.white),
-                        SizedBox(width: Dimensions.dimenisonNo8),
-                        Flexible(
-                          child: Text(
-                            footerModel.mobileNo2,
-                            style: TextStyle(
-                              fontSize: Dimensions.dimenisonNo14,
-                              color: Colors.white,
-                            ),
-                          ),
+                      ),
+                      SizedBox(height: Dimensions.dimenisonNo12),
+                      Text(
+                        "Address: ${footerModel.address}",
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                          fontSize: Dimensions.dimenisonNo10,
+                          color: Colors.white70,
                         ),
-                      ],
-                    ),
-                    SizedBox(height: Dimensions.dimenisonNo16),
-                    Row(
-                      children: [
-                        Icon(Icons.email,
-                            size: Dimensions.dimenisonNo16,
-                            color: Colors.white),
-                        SizedBox(width: Dimensions.dimenisonNo8),
-                        Flexible(
-                          child: Text(
-                            email ?? 'N/A',
-                            style: TextStyle(
-                              fontSize: Dimensions.dimenisonNo14,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: Dimensions.dimenisonNo16),
-
-                    // Social media icons row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _buildSocialIcon(Icons.facebook, footerModel.facebook),
-                        if (footerModel.instaragran.isNotEmpty)
-                          _buildSocialIcon(FontAwesomeIcons.instagram,
-                              footerModel.instaragran),
-                        if (footerModel.x.isNotEmpty)
-                          _buildSocialIcon(
-                              FontAwesomeIcons.twitter, footerModel.x),
-                        if (footerModel.linked.isNotEmpty)
-                          _buildSocialIcon(
-                              FontAwesomeIcons.linkedinIn, footerModel.linked),
-                        if (footerModel.youtube.isNotEmpty)
-                          _buildSocialIcon(
-                              FontAwesomeIcons.youtube, footerModel.youtube),
-                        if (footerModel.whatappNo.isNotEmpty)
-                          IconButton(
-                            onPressed: () {
-                              _openWhatsApp(footerModel.whatappNo);
-                            },
-                            icon: FaIcon(
-                              FontAwesomeIcons.whatsapp,
-                              size: Dimensions.dimenisonNo24,
-                              color: Colors.grey,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: Dimensions.dimenisonNo5),
-          Text(
-            "© Copyright by Sab Empire Hair & Skin Solutions PVT LTD. All rights reserved.",
-            overflow: TextOverflow.fade,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: Dimensions.dimenisonNo10,
+                SizedBox(width: Dimensions.dimenisonNo20),
+
+                // Column 2: About Us
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "About Us",
+                        style: TextStyle(
+                          fontSize: Dimensions.dimenisonNo18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: Dimensions.dimenisonNo20),
+                      Text(
+                        footerModel.about,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.justify,
+                        maxLines: 6,
+                        style: TextStyle(
+                          fontSize: Dimensions.dimenisonNo10,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: Dimensions.dimenisonNo50),
+
+                // Column 3: Service Cities
+                Expanded(
+                  // flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Cities",
+                        style: TextStyle(
+                          fontSize: Dimensions.dimenisonNo18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: Dimensions.dimenisonNo16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: footerModel.city.map((city) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                bottom: Dimensions.dimenisonNo8),
+                            child: Text(
+                              city,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Column 4: Contact Us
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Contact Us",
+                        style: TextStyle(
+                          fontSize: Dimensions.dimenisonNo18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: Dimensions.dimenisonNo16),
+                      Row(
+                        children: [
+                          Icon(Icons.phone,
+                              size: Dimensions.dimenisonNo16,
+                              color: Colors.white),
+                          SizedBox(width: Dimensions.dimenisonNo8),
+                          Flexible(
+                            child: Text(
+                              "${footerModel.mobileNo}, ${footerModel.mobileNo2}",
+                              style: TextStyle(
+                                fontSize: Dimensions.dimenisonNo14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: Dimensions.dimenisonNo16),
+                      Row(
+                        children: [
+                          Icon(Icons.email,
+                              size: Dimensions.dimenisonNo16,
+                              color: Colors.white),
+                          SizedBox(width: Dimensions.dimenisonNo8),
+                          Flexible(
+                            child: Text(
+                              email!,
+                              style: TextStyle(
+                                fontSize: Dimensions.dimenisonNo14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: Dimensions.dimenisonNo16),
+
+                      // Social media icons row
+                      Wrap(
+                        children: [
+                          _buildSocialIcon(
+                              Icons.facebook, footerModel.facebook),
+                          if (footerModel.instaragran.isNotEmpty)
+                            _buildSocialIcon(FontAwesomeIcons.instagram,
+                                footerModel.instaragran),
+                          if (footerModel.x.isNotEmpty)
+                            _buildSocialIcon(
+                                FontAwesomeIcons.twitter, footerModel.x),
+                          if (footerModel.linked.isNotEmpty)
+                            _buildSocialIcon(FontAwesomeIcons.linkedinIn,
+                                footerModel.linked),
+                          if (footerModel.youtube.isNotEmpty)
+                            _buildSocialIcon(
+                                FontAwesomeIcons.youtube, footerModel.youtube),
+                          if (footerModel.whatappNo.isNotEmpty)
+                            IconButton(
+                              onPressed: () {
+                                _openWhatsApp(footerModel.whatappNo);
+                              },
+                              icon: FaIcon(
+                                FontAwesomeIcons.whatsapp,
+                                size: Dimensions.dimenisonNo24,
+                                color: Colors.grey,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            SizedBox(height: Dimensions.dimenisonNo5),
+            Text(
+              "© 2025 Sab Empire Hair & Skin Solutions PVT LTD. All rights reserved.",
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: Dimensions.dimenisonNo10,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

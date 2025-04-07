@@ -28,13 +28,4 @@ class AppProvider with ChangeNotifier {
     }
     return isDone;
   }
-
-  // Future<bool> updateJob(JobModel jobModel) async {
-  //   bool isDone = await _firebase.updateFooter(footer);
-  //   if (isDone) {
-  //     footerModel = footer;
-  //     notifyListeners();
-  //   }
-  //   return isDone;
-  // }
 }

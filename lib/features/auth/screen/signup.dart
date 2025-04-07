@@ -334,7 +334,10 @@ class _SignupPageState extends State<SignupPage> {
                 SizedBox(
                   height: Dimensions.dimenisonNo12,
                 ),
-                Footer(footerModel: appProvider.getFooterModel)
+                Footer(
+                  footerModel: appProvider.getFooterModel,
+                  email: appProvider.getFooterModel.emailOfCustCare,
+                ),
               ],
             ),
           ),

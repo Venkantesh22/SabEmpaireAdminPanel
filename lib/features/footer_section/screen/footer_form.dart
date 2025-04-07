@@ -22,7 +22,15 @@ class _FooterFormState extends State<FooterForm> {
   // Controllers for each field.
   final TextEditingController _aboutController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _mobileNo2Controller = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _emailOfHrController = TextEditingController();
+  final TextEditingController _emailOfInfoController = TextEditingController();
+  final TextEditingController _emailOfCustCareController =
+      TextEditingController();
+  final TextEditingController _emailOfCeoController = TextEditingController();
+  final TextEditingController _whatappNoController =
+      TextEditingController(); // New controller
   final TextEditingController _facebackController = TextEditingController();
   final TextEditingController _instagramController = TextEditingController();
   final TextEditingController _xController = TextEditingController();
@@ -50,15 +58,19 @@ class _FooterFormState extends State<FooterForm> {
     if (footerModel != null) {
       _aboutController.text = footerModel!.about;
       _mobileController.text = footerModel!.mobileNo;
-      _emailController.text = footerModel!.email;
-      _facebackController.text = footerModel!.faceback;
+      _mobileNo2Controller.text = footerModel!.mobileNo2;
+      _addressController.text = footerModel!.address;
+      _emailOfHrController.text = footerModel!.emailOfHr;
+      _emailOfInfoController.text = footerModel!.emailOfInfo;
+      _emailOfCustCareController.text = footerModel!.emailOfCustCare;
+      _emailOfCeoController.text = footerModel!.emailOfCeo;
+      _whatappNoController.text = footerModel!.whatappNo; // Populate new field
+      _facebackController.text = footerModel!.facebook;
       _instagramController.text = footerModel!.instaragran;
       _xController.text = footerModel!.x;
       _linkedController.text = footerModel!.linked;
       _youtubeController.text = footerModel!.youtube;
       cityList.addAll(footerModel!.city);
-      // Also set the city text field (as a comma-separated list)
-      // _cityController.text = cityList.join(', ');
     }
 
     if (mounted) {
@@ -82,23 +94,24 @@ class _FooterFormState extends State<FooterForm> {
       AppProvider appProvider =
           Provider.of<AppProvider>(context, listen: false);
       try {
-        if (_cityController.text.isNotEmpty) {
-          cityList.add(_cityController.text.trim());
-        }
-
         FooterModel footer = FooterModel(
           id: isfirstTimeCreate
               ? ""
               : footerModel!.id, // This will be updated by the service.
           about: _aboutController.text.trim(),
           mobileNo: _mobileController.text.trim(),
-          email: _emailController.text.trim(),
-          faceback: _facebackController.text.trim(),
+          mobileNo2: _mobileNo2Controller.text.trim(),
+          address: _addressController.text.trim(),
+          emailOfHr: _emailOfHrController.text.trim(),
+          emailOfInfo: _emailOfInfoController.text.trim(),
+          emailOfCustCare: _emailOfCustCareController.text.trim(),
+          emailOfCeo: _emailOfCeoController.text.trim(),
+          whatappNo: _whatappNoController.text.trim(), // New field
+          facebook: _facebackController.text.trim(),
           instaragran: _instagramController.text.trim(),
           x: _xController.text.trim(),
           linked: _linkedController.text.trim(),
           youtube: _youtubeController.text.trim(),
-          // Split the city field by comma, trimming each part.
           city: cityList,
         );
         bool isDone = isfirstTimeCreate
@@ -141,7 +154,13 @@ class _FooterFormState extends State<FooterForm> {
   void dispose() {
     _aboutController.dispose();
     _mobileController.dispose();
-    _emailController.dispose();
+    _mobileNo2Controller.dispose();
+    _addressController.dispose();
+    _emailOfHrController.dispose();
+    _emailOfInfoController.dispose();
+    _emailOfCustCareController.dispose();
+    _emailOfCeoController.dispose();
+    _whatappNoController.dispose(); // Dispose new controller
     _facebackController.dispose();
     _instagramController.dispose();
     _xController.dispose();
@@ -149,6 +168,43 @@ class _FooterFormState extends State<FooterForm> {
     _youtubeController.dispose();
     _cityController.dispose();
     super.dispose();
+  }
+
+  String? _validateEmail(String? value, String fieldName) {
+    if (value == null || value.isEmpty) {
+      return "Please enter $fieldName email";
+    }
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+      return "Please enter a valid email address for $fieldName";
+    }
+    return null;
+  }
+
+  String? _validateMobile(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter a mobile number";
+    }
+    if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+      return "Mobile number must be exactly 10 digits";
+    }
+    return null;
+  }
+
+  String? _validateWhatsapp(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter a WhatsApp number";
+    }
+    if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+      return "WhatsApp number must be exactly 10 digits";
+    }
+    return null;
+  }
+
+  String? _validateAddress(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter an address";
+    }
+    return null;
   }
 
   // Simple URL validation: checks if it starts with "http" or "https"
@@ -195,33 +251,70 @@ class _FooterFormState extends State<FooterForm> {
                         labelText: "Mobile Number",
                       ),
                       keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter a mobile number";
-                        }
-                        if (!RegExp(r'^\d{10}$').hasMatch(value)) {
-                          return "Mobile number must be exactly 10 digits";
-                        }
-                        return null;
-                      },
+                      validator: _validateMobile,
                     ),
                     SizedBox(height: Dimensions.dimenisonNo12),
                     TextFormField(
-                      controller: _emailController,
+                      controller: _mobileNo2Controller,
                       decoration: const InputDecoration(
-                        labelText: "Email",
+                        labelText: "Secondary Mobile Number",
+                      ),
+                      keyboardType: TextInputType.phone,
+                      validator: _validateMobile,
+                    ),
+                    SizedBox(height: Dimensions.dimenisonNo12),
+                    TextFormField(
+                      controller: _whatappNoController,
+                      decoration: const InputDecoration(
+                        labelText: "WhatsApp Number",
+                      ),
+                      keyboardType: TextInputType.phone,
+                      validator: _validateWhatsapp,
+                    ),
+                    SizedBox(height: Dimensions.dimenisonNo12),
+                    TextFormField(
+                      controller: _addressController,
+                      decoration: const InputDecoration(
+                        labelText: "Address",
+                      ),
+                      validator: _validateAddress,
+                    ),
+                    SizedBox(height: Dimensions.dimenisonNo12),
+                    TextFormField(
+                      controller: _emailOfHrController,
+                      decoration: const InputDecoration(
+                        labelText: "HR Email",
                       ),
                       keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter an email";
-                        }
-                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                            .hasMatch(value)) {
-                          return "Please enter a valid email address";
-                        }
-                        return null;
-                      },
+                      validator: (value) => _validateEmail(value, "HR"),
+                    ),
+                    SizedBox(height: Dimensions.dimenisonNo12),
+                    TextFormField(
+                      controller: _emailOfInfoController,
+                      decoration: const InputDecoration(
+                        labelText: "Info Email",
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) => _validateEmail(value, "Info"),
+                    ),
+                    SizedBox(height: Dimensions.dimenisonNo12),
+                    TextFormField(
+                      controller: _emailOfCustCareController,
+                      decoration: const InputDecoration(
+                        labelText: "Customer Care Email",
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) =>
+                          _validateEmail(value, "Customer Care"),
+                    ),
+                    SizedBox(height: Dimensions.dimenisonNo12),
+                    TextFormField(
+                      controller: _emailOfCeoController,
+                      decoration: const InputDecoration(
+                        labelText: "CEO Email",
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) => _validateEmail(value, "CEO"),
                     ),
                     SizedBox(height: Dimensions.dimenisonNo12),
                     TextFormField(
@@ -264,32 +357,61 @@ class _FooterFormState extends State<FooterForm> {
                       validator: (value) => _validateUrl(value, "YouTube"),
                     ),
                     SizedBox(height: Dimensions.dimenisonNo12),
-                    TextFormField(
-                      controller: _cityController,
-                      decoration: const InputDecoration(
-                        labelText: "Cities",
-                        hintText: "Enter cities separated by commas",
-                      ),
-                      // validator: (value) => (value == null || value.isEmpty)
-                      //     ? "Please enter at least one city"
-                      //     : null,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _cityController,
+                            decoration: const InputDecoration(
+                              labelText: "Cities",
+                              hintText: "Enter a city",
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: Dimensions.dimenisonNo8),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_cityController.text.trim().isNotEmpty) {
+                              setState(() {
+                                cityList.add(_cityController.text.trim());
+                                _cityController.clear();
+                                print("cityList == $cityList");
+                              });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.buttonRedColor,
+                          ),
+                          child: const Text(
+                            "Add",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: Dimensions.dimenisonNo20),
-                    // Display all cities from footerModel in a horizontal row.
                     if (footerModel != null && footerModel!.city.isNotEmpty)
                       SizedBox(
-                        height: 40, // Fixed height for the horizontal list.
+                        height: Dimensions.dimenisonNo40,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: footerModel!.city.length,
+                          itemCount: cityList.length,
                           itemBuilder: (context, index) {
-                            String cityName = footerModel!.city[index];
+                            String cityName = cityList[index];
                             return Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: Dimensions.dimenisonNo8),
                               child: Chip(
                                 label: Text(cityName),
                                 backgroundColor: Colors.grey.shade200,
+                                deleteIcon: Icon(Icons.close,
+                                    size: Dimensions.dimenisonNo18),
+                                onDeleted: () {
+                                  setState(() {
+                                    cityList.removeAt(index);
+                                    print("cityList == $cityList");
+                                  });
+                                },
                               ),
                             );
                           },

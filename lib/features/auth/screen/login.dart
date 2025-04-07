@@ -319,7 +319,10 @@ class _LogingPageState extends State<LogingPage> {
                         SizedBox(
                           height: Dimensions.dimenisonNo12,
                         ),
-                        Footer(footerModel: appProvider.getFooterModel)
+                        Footer(
+                          footerModel: appProvider.getFooterModel,
+                          email: appProvider.getFooterModel.emailOfCustCare,
+                        ),
                       ],
                     ),
                   ),

@@ -10,7 +10,6 @@ import 'package:admin_panel_ak/models/service_provider_model/service_provider_mo
 import 'package:admin_panel_ak/models/user_enquiry_model/user_enquiry_model.dart';
 import 'package:admin_panel_ak/models/user_model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseFirestoreHelper {

@@ -1,4 +1,7 @@
+// ignore_for_file: unused_element
+
 import 'package:admin_panel_ak/constants/constants.dart';
+import 'package:admin_panel_ak/constants/global_variable.dart';
 import 'package:admin_panel_ak/models/footer_model/footer_model.dart';
 import 'package:admin_panel_ak/utility/dimenison.dart';
 import 'package:flutter/material.dart';
@@ -8,81 +11,83 @@ import 'dart:js' as js;
 
 class Footer extends StatelessWidget {
   final FooterModel footerModel;
-  const Footer({super.key, required this.footerModel});
+  final String? email;
+
+  const Footer({super.key, required this.footerModel, required this.email});
 
   @override
   Widget build(BuildContext context) {
     // Helper to launch a URL in a new tab.
-
-    // Method to open WhatsApp with the phone number
     Future<void> _openWhatsApp(String phoneNumber) async {
       try {
         final Uri whatsappUrl = Uri.parse('https://wa.me/$phoneNumber');
         await launchUrl(whatsappUrl);
       } catch (e) {
-        showBottonMessageError('Could not launch WhatsApp $e', context);
-      }
-    }
-
-    Future<void> _openInstaragran(String instaUrl) async {
-      try {
-        final Uri Url = Uri.parse(instaUrl);
-        await launchUrl(Url);
-      } catch (e) {
-        print('Could not launch nstaragran $e');
-        showMessage('Could not launch nstaragran $e');
+        showBottonMessageError('Could not launch WhatsApp: $e', context);
       }
     }
 
     // Build social media icon that opens the link.
-    Widget _buildSocialIcon(IconData iconData, String url, VoidCallback ontap) {
-      return InkWell(
-        onTap: () => ontap,
-        child: Icon(
+    IconButton _buildSocialIcon(IconData iconData, String url) {
+      return IconButton(
+        onPressed: () {
+          if (url.isNotEmpty) {
+            js.context.callMethod('open', [url]);
+          } else {
+            showBottonMessageError('Invalid URL', context);
+          }
+        },
+        icon: FaIcon(
           iconData,
+          size: Dimensions.dimenisonNo24,
+          color: Colors.grey,
         ),
       );
     }
 
-    IconButton iconButtonMethod(
-      IconData iconData,
-      String url,
-    ) {
-      return IconButton(
-          onPressed: () {
-            js.context.callMethod('open', [url]);
-          },
-          icon: FaIcon(
-            iconData,
-            size: Dimensions.dimenisonNo24,
-            color: Colors.grey,
-          ));
-    }
-
     return Padding(
-      padding: EdgeInsets.all(Dimensions.dimenisonNo12),
+      padding: EdgeInsets.symmetric(
+        vertical: Dimensions.dimenisonNo12,
+        horizontal: Dimensions.dimenisonNo8,
+      ),
       child: Column(
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: Dimensions.screenWidth / 5,
-                child: Center(
-                  child: Image.asset(
-                    'assets/images/sabWithBea.jpg',
-                    height: Dimensions.dimenisonNo80,
-                    fit: BoxFit.contain,
-                  ),
+              // Column 1: Logo and Address
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        GlobalVariable.LogWithBeuText,
+                        height: Dimensions.dimenisonNo80,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    SizedBox(height: Dimensions.dimenisonNo12),
+                    Text(
+                      footerModel.address,
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                        fontSize: Dimensions.dimenisonNo10,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
-                width: Dimensions.dimenisonNo20,
+                width: Dimensions.dimenisonNo16,
               ),
-              // Column 1: About Us
 
+              // Column 2: About Us
               Expanded(
+                flex: 2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -95,11 +100,11 @@ class Footer extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: Dimensions.dimenisonNo20),
-                    // Instead of wrapping Text with Expanded, set maxLines directly.
                     Text(
                       footerModel.about,
-                      overflow: TextOverflow.visible,
-                      maxLines: 6,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.justify,
+                      // maxLines: 6,
                       style: TextStyle(
                         fontSize: Dimensions.dimenisonNo10,
                         color: Colors.white70,
@@ -108,9 +113,13 @@ class Footer extends StatelessWidget {
                   ],
                 ),
               ),
-
               SizedBox(
-                width: Dimensions.screenWidth / 5,
+                width: Dimensions.dimenisonNo12,
+              ),
+
+              // Column 3: Service Cities
+              Expanded(
+                flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -139,10 +148,10 @@ class Footer extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: Dimensions.dimenisonNo20),
 
-              SizedBox(
-                width: Dimensions.screenWidth / 5,
+              // Column 4: Contact Us
+              Expanded(
+                flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -165,8 +174,27 @@ class Footer extends StatelessWidget {
                           child: Text(
                             footerModel.mobileNo,
                             style: TextStyle(
-                                fontSize: Dimensions.dimenisonNo14,
-                                color: Colors.white),
+                              fontSize: Dimensions.dimenisonNo14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: Dimensions.dimenisonNo16),
+                    Row(
+                      children: [
+                        Icon(Icons.phone,
+                            size: Dimensions.dimenisonNo16,
+                            color: Colors.white),
+                        SizedBox(width: Dimensions.dimenisonNo8),
+                        Flexible(
+                          child: Text(
+                            footerModel.mobileNo2,
+                            style: TextStyle(
+                              fontSize: Dimensions.dimenisonNo14,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
@@ -180,59 +208,62 @@ class Footer extends StatelessWidget {
                         SizedBox(width: Dimensions.dimenisonNo8),
                         Flexible(
                           child: Text(
-                            footerModel.email,
+                            email ?? 'N/A',
                             style: TextStyle(
-                                fontSize: Dimensions.dimenisonNo14,
-                                color: Colors.white),
+                              fontSize: Dimensions.dimenisonNo14,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: Dimensions.dimenisonNo16),
-                    // Social media icons row.
+
+                    // Social media icons row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Padding(
-                            padding: EdgeInsets.only(right: 4),
-                            child: iconButtonMethod(
-                                Icons.facebook, footerModel.faceback)),
+                        _buildSocialIcon(Icons.facebook, footerModel.facebook),
                         if (footerModel.instaragran.isNotEmpty)
-                          Padding(
-                              padding: EdgeInsets.only(right: 4),
-                              child: iconButtonMethod(
-                                  FontAwesomeIcons.instagram,
-                                  footerModel.instaragran)),
+                          _buildSocialIcon(FontAwesomeIcons.instagram,
+                              footerModel.instaragran),
                         if (footerModel.x.isNotEmpty)
-                          Padding(
-                            padding: EdgeInsets.only(right: 4),
-                            child: iconButtonMethod(
-                                FontAwesomeIcons.twitter, footerModel.x),
-                          ),
+                          _buildSocialIcon(
+                              FontAwesomeIcons.twitter, footerModel.x),
                         if (footerModel.linked.isNotEmpty)
-                          Padding(
-                            padding: EdgeInsets.only(right: 4),
-                            child: iconButtonMethod(FontAwesomeIcons.linkedinIn,
-                                footerModel.linked),
-                          ),
+                          _buildSocialIcon(
+                              FontAwesomeIcons.linkedinIn, footerModel.linked),
                         if (footerModel.youtube.isNotEmpty)
-                          iconButtonMethod(
+                          _buildSocialIcon(
                               FontAwesomeIcons.youtube, footerModel.youtube),
+                        if (footerModel.whatappNo.isNotEmpty)
+                          IconButton(
+                            onPressed: () {
+                              _openWhatsApp(footerModel.whatappNo);
+                            },
+                            icon: FaIcon(
+                              FontAwesomeIcons.whatsapp,
+                              size: Dimensions.dimenisonNo24,
+                              color: Colors.grey,
+                            ),
+                          ),
                       ],
                     ),
-
-                    // Copyright row.
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: Dimensions.dimenisonNo16),
+          SizedBox(height: Dimensions.dimenisonNo5),
           Text(
-            "© Copyright by Samay",
+            "© Copyright by Sab Empire Hair & Skin Solutions PVT LTD. All rights reserved.",
+            overflow: TextOverflow.fade,
+            textAlign: TextAlign.center,
             style: TextStyle(
-                color: Colors.white, fontSize: Dimensions.dimenisonNo14),
-          )
+              color: Colors.white70,
+              fontSize: Dimensions.dimenisonNo10,
+            ),
+          ),
         ],
       ),
     );

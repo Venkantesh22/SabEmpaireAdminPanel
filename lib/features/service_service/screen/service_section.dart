@@ -66,9 +66,9 @@ class _ServiceSectionState extends State<ServiceSection> {
           List<SuperCategoryModel> sortedCategories = snapshot.data!.toList();
           sortedCategories.sort((a, b) => a.order.compareTo(b.order));
 
-          return Padding(
-            padding: EdgeInsets.all(Dimensions.dimenisonNo8),
-            child: SingleChildScrollView(
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(Dimensions.dimenisonNo8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -80,48 +80,51 @@ class _ServiceSectionState extends State<ServiceSection> {
                     ),
                   ),
                   SizedBox(height: Dimensions.dimenisonNo20),
-                  SingleChildScrollView(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.5,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: sortedCategories.length,
-                        itemBuilder: (context, index) {
-                          SuperCategoryModel cate = sortedCategories[index];
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${cate.order}',
-                                  style: TextStyle(
-                                    fontSize: Dimensions.dimenisonNo16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height /
+                        1, // Set a fixed height
+                    child: ListView.builder(
+                      scrollDirection:
+                          Axis.horizontal, // Enable horizontal scrolling
+                      physics:
+                          const BouncingScrollPhysics(), // Smooth scrolling
+                      itemCount: sortedCategories.length,
+                      itemBuilder: (context, index) {
+                        SuperCategoryModel cate = sortedCategories[index];
+                        return Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: Dimensions.dimenisonNo8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${cate.order}',
+                                style: TextStyle(
+                                  fontSize: Dimensions.dimenisonNo16,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                CupertinoButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {
-                                    Provider.of<ServiceProvider>(context,
-                                            listen: false)
-                                        .selectSuperCatePro(cate);
-                                    Routes.instance.push(
-                                      widget: ServicesPages(
-                                          superCategoryName:
-                                              cate.superCategoryName),
-                                      context: context,
-                                    );
-                                  },
-                                  child: SuperCateImage(
-                                    superCategoryModel: cate,
-                                  ),
+                              ),
+                              CupertinoButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: () {
+                                  Provider.of<ServiceProvider>(context,
+                                          listen: false)
+                                      .selectSuperCatePro(cate);
+                                  Routes.instance.push(
+                                    widget: ServicesPages(
+                                        superCategoryName:
+                                            cate.superCategoryName),
+                                    context: context,
+                                  );
+                                },
+                                child: SuperCateImage(
+                                  superCategoryModel: cate,
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

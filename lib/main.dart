@@ -1,3 +1,4 @@
+import 'package:admin_panel_ak/constants/mycustomscroller.dart';
 import 'package:admin_panel_ak/constants/theame.dart';
 import 'package:admin_panel_ak/features/auth/screen/login.dart';
 import 'package:admin_panel_ak/features/dastbord/dastbord.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'SabEmpire Admin',
           theme: themeData,
+          scrollBehavior: MyCustomScroller(),
           home: StreamBuilder(
             stream: FirebaseAuthHelper.instance.getAuthChange,
             builder: (context, snapshot) {

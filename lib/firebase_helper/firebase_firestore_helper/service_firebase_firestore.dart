@@ -73,37 +73,6 @@ class ServiceFirebaseFirestore {
     }
   }
 
-  // Future<SuperCategoryModel> createSuperCategory(
-  //   String superCateName,
-  //   int order,
-  //   Uint8List superCateImage,
-  // ) async {
-  //   // Create a new document reference with an auto-generated ID.
-  //   DocumentReference<Map<String, dynamic>> docRef =
-  //       _firebaseFirestore.collection('superCategory').doc();
-
-  //   String? _imageLink = await _firebaseStorageHelper.uploadSuperCateImage(
-  //       superCateName, superCateImage);
-
-  //   // Retrieve current admin UID.
-  //   String? adminUid = FirebaseAuth.instance.currentUser?.uid;
-
-  //   // Create a model instance.
-  //   SuperCategoryModel superCategoryModel = SuperCategoryModel(
-  //     id: docRef.id,
-  //     adminId: adminUid!,
-  //     superCategoryName: superCateName,
-  //     order: order,
-
-  //     imgUrl: _imageLink,
-  //     haveData: false,
-  //   );
-
-  //   // Save the document to Firestore.
-  //   await docRef.set(superCategoryModel.toJson());
-  //   return superCategoryModel;
-  // }
-
   /// Retrieves a super category document by its [id].
   Future<SuperCategoryModel?> getSuperCategory(String id) async {
     try {
@@ -120,19 +89,6 @@ class ServiceFirebaseFirestore {
     }
   }
 
-  // /// Updates an existing super category document with [updatedCategory] data.
-  // Future<void> updateSuperCategoryWithoutImage(
-  //     SuperCategoryModel updatedCategory) async {
-  //   try {
-  //     await _firebaseFirestore
-  //         .collection('superCategory')
-  //         .doc(updatedCategory.id)
-  //         .update(updatedCategory.toJson());
-  //   } catch (e) {
-  //     print('Error updating super category: $e');
-  //     rethrow;
-  //   }
-  // }
   Future<void> updateSuperCategoryWithoutImage(
       SuperCategoryModel updatedCategory) async {
     try {
@@ -267,21 +223,6 @@ class ServiceFirebaseFirestore {
     }
   }
 
-  // Future<bool> deleteSuperCategory(SuperCategoryModel superCateModel) async {
-  //   try {
-  //     await _firebaseFirestore
-  //         .collection('superCategory')
-  //         .doc(superCateModel.id)
-  //         .delete();
-  //     await _firebaseStorageHelper
-  //         .deleteImageFromFirebase(superCateModel.imgUrl!);
-  //     return true;
-  //   } catch (e) {
-  //     print('Error deleting super category: $e');
-  //     rethrow;
-  //   }
-  // }
-
   /// Retrieves a list of all super category documents.
   Stream<List<SuperCategoryModel>> getAllSuperCategories() {
     try {
@@ -351,32 +292,6 @@ class ServiceFirebaseFirestore {
     }
   }
 
-  // Future<CategoryModel> createCategory(
-  //   String cateName,
-  //   SuperCategoryModel superCategoryModel,
-  // ) async {
-  //   try {
-  //     DocumentReference<Map<String, dynamic>> reference = _firebaseFirestore
-  //         .collection("superCategory")
-  //         .doc(superCategoryModel.id)
-  //         .collection("category")
-  //         .doc();
-
-  //     CategoryModel categoryModel = CategoryModel(
-  //       id: reference.id,
-  //       categoryName: cateName,
-  //       haveData: false,
-  //       superCategoryName: superCategoryModel.superCategoryName,
-  //     );
-
-  //     await reference.set(categoryModel.toJson());
-  //     return categoryModel;
-  //   } catch (e) {
-  //     print('Error creating category: $e');
-  //     rethrow;
-  //   }
-  // }
-
   /// Get a single category by its ID under a specified super category.
   Future<CategoryModel?> getCategory(
       String superCategoryId, String categoryId) async {
@@ -442,22 +357,6 @@ class ServiceFirebaseFirestore {
     }
   }
 
-  /////////////////////
-  // Future<void> updateCategory(
-  //     CategoryModel categoryModel, String superCategoryId) async {
-  //   try {
-  //     await _firebaseFirestore
-  //         .collection("superCategory")
-  //         .doc(superCategoryId)
-  //         .collection("category")
-  //         .doc(categoryModel.id)
-  //         .update(categoryModel.toJson());
-  //   } catch (e) {
-  //     print('Error updating category: $e');
-  //     rethrow;
-  //   }
-  // }
-
   /// Delete a category.
   Future<bool> deleteCategory(String superCategoryId, String categoryId) async {
     try {
@@ -511,21 +410,6 @@ class ServiceFirebaseFirestore {
     }
   }
 
-  // Future<bool> deleteCategory(String superCategoryId, String categoryId) async {
-  //   try {
-  //     await _firebaseFirestore
-  //         .collection("superCategory")
-  //         .doc(superCategoryId)
-  //         .collection("category")
-  //         .doc(categoryId)
-  //         .delete();
-  //     return true;
-  //   } catch (e) {
-  //     print('Error deleting category: $e');
-  //     rethrow;
-  //   }
-  // }
-
   /// Retrieve a list of all categories under a specific super category.
   Future<List<CategoryModel>> getCategoryListFirebase(
       String superCategoryId) async {
@@ -547,68 +431,6 @@ class ServiceFirebaseFirestore {
   }
   //! ----------------------  SERVICE  FUNCTIONS ----------------------
 
-  /// Create a new ServiceModel document.
-  // Future<ServiceModel> createService(
-  //   String cateName,
-  //   String categoryId,
-  //   SuperCategoryModel superCategoryModel,
-  //   String servicesName,
-  //   double price,
-  //   int serviceDurationMin,
-  //   int order, // Desired order input
-  // ) async {
-  //   try {
-  //     // Create a new document reference in the services subcollection.
-  //     DocumentReference<Map<String, dynamic>> reference = _firebaseFirestore
-  //         .collection("superCategory")
-  //         .doc(superCategoryModel.id)
-  //         .collection("category")
-  //         .doc(categoryId)
-  //         .collection("services")
-  //         .doc();
-
-  //     // Create a batch write for atomic updates.
-  //     WriteBatch batch = _firebaseFirestore.batch();
-
-  //     // Query services with order equal to the desired order.
-  //     QuerySnapshot<Map<String, dynamic>> snapshot = await _firebaseFirestore
-  //         .collection("superCategory")
-  //         .doc(superCategoryModel.id)
-  //         .collection("category")
-  //         .doc(categoryId)
-  //         .collection("services")
-  //         .where("order", isEqualTo: order)
-  //         .get();
-
-  //     // For each conflicting service, update its order to order + 1 (shift once).
-  //     for (var doc in snapshot.docs) {
-  //       batch.update(doc.reference, {'order': order + 1});
-  //     }
-
-  //     // Create the new service model with the desired order.
-  //     ServiceModel serviceModel = ServiceModel(
-  //       id: reference.id,
-  //       categoryId: categoryId,
-  //       categoryName: cateName,
-  //       superCategoryName: superCategoryModel.superCategoryName,
-  //       servicesName: servicesName,
-  //       price: price,
-  //       serviceDurationMin: serviceDurationMin,
-  //       order: order,
-  //     );
-
-  //     // Add the new service document to the batch.
-  //     batch.set(reference, serviceModel.toJson());
-
-  //     // Commit the batch atomically.
-  //     await batch.commit();
-
-  //     return serviceModel;
-  //   } catch (e) {
-  //     print('Error creating service: $e');
-  //     rethrow;
-  //   }
-  // }
   Future<ServiceModel> createService(
     String cateName,
     String categoryId,
@@ -617,6 +439,7 @@ class ServiceFirebaseFirestore {
     double price,
     int serviceDurationMin,
     int order, // Desired order input
+    String description,
   ) async {
     try {
       // Create a new document reference in the "services" subcollection
@@ -657,6 +480,7 @@ class ServiceFirebaseFirestore {
         price: price,
         serviceDurationMin: serviceDurationMin,
         order: order,
+        description: description,
       );
 
       // Set the new service document in the batch.
@@ -778,7 +602,7 @@ class ServiceFirebaseFirestore {
     String serviceId,
   ) async {
     try {
-      // Reference to the service to delete.
+      // Reference to the service document to be deleted.
       DocumentReference<Map<String, dynamic>> serviceRef = _firebaseFirestore
           .collection("superCategory")
           .doc(superCategoryId)
@@ -787,7 +611,7 @@ class ServiceFirebaseFirestore {
           .collection("services")
           .doc(serviceId);
 
-      // Get the document to determine the order.
+      // Retrieve the service document to determine its order.
       DocumentSnapshot<Map<String, dynamic>> docSnapshot =
           await serviceRef.get();
       if (!docSnapshot.exists) {
@@ -795,12 +619,14 @@ class ServiceFirebaseFirestore {
       }
       int deletedOrder = docSnapshot.data()?['order'] ?? 0;
 
+      // Create a write batch to execute multiple operations atomically.
       WriteBatch batch = _firebaseFirestore.batch();
 
-      // Delete the service document.
+      // Schedule deletion of the selected service.
       batch.delete(serviceRef);
 
-      // Query all services with an order greater than the deleted service's order.
+      // Query all services with order greater than the deleted service's order,
+      // ordering them to ensure a sequential reassignment.
       QuerySnapshot<Map<String, dynamic>> snapshot = await _firebaseFirestore
           .collection("superCategory")
           .doc(superCategoryId)
@@ -808,15 +634,17 @@ class ServiceFirebaseFirestore {
           .doc(categoryId)
           .collection("services")
           .where('order', isGreaterThan: deletedOrder)
+          .orderBy('order')
           .get();
 
-      // For each service, decrement its order by 1.
+      // Reassign the order in a sequential manner.
+      int newOrder = deletedOrder;
       for (var doc in snapshot.docs) {
-        int currentOrder = doc.data()['order'] ?? 0;
-        batch.update(doc.reference, {'order': currentOrder - 1});
+        batch.update(doc.reference, {'order': newOrder});
+        newOrder++;
       }
 
-      // Commit the batch.
+      // Commit the batch for atomic execution.
       await batch.commit();
       return true;
     } catch (e) {
@@ -825,44 +653,55 @@ class ServiceFirebaseFirestore {
     }
   }
 
-  /// Update an existing ServiceModel document.
-  /// [superCategoryId] is the id of the parent super category document.
-  // Future<void> updateService(
-  //   ServiceModel serviceModel,
+  // Future<bool> deleteService(
   //   String superCategoryId,
   //   String categoryId,
+  //   String serviceId,
   // ) async {
   //   try {
-  //     await _firebaseFirestore
+  //     // Reference to the service to delete.
+  //     DocumentReference<Map<String, dynamic>> serviceRef = _firebaseFirestore
   //         .collection("superCategory")
   //         .doc(superCategoryId)
   //         .collection("category")
   //         .doc(categoryId)
   //         .collection("services")
-  //         .doc(serviceModel.id)
-  //         .update(serviceModel.toJson());
-  //   } catch (e) {
-  //     print('Error updating service: $e');
-  //     rethrow;
-  //   }
-  // }
+  //         .doc(serviceId);
 
-  // /// Delete a ServiceModel document.
-  // /// [superCategoryId] is the id of the parent super category document.
-  // Future<bool> deleteService(
-  //     String superCategoryId, String categoryId, String serviceId) async {
-  //   try {
-  //     await _firebaseFirestore
+  //     // Get the document to determine the order.
+  //     DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+  //         await serviceRef.get();
+  //     if (!docSnapshot.exists) {
+  //       throw Exception("Service not found");
+  //     }
+  //     int deletedOrder = docSnapshot.data()?['order'] ?? 0;
+
+  //     WriteBatch batch = _firebaseFirestore.batch();
+
+  //     // Delete the service document.
+  //     batch.delete(serviceRef);
+
+  //     // Query all services with an order greater than the deleted service's order.
+  //     QuerySnapshot<Map<String, dynamic>> snapshot = await _firebaseFirestore
   //         .collection("superCategory")
   //         .doc(superCategoryId)
   //         .collection("category")
   //         .doc(categoryId)
   //         .collection("services")
-  //         .doc(serviceId)
-  //         .delete();
+  //         .where('order', isGreaterThan: deletedOrder)
+  //         .get();
+
+  //     // For each service, decrement its order by 1.
+  //     for (var doc in snapshot.docs) {
+  //       int currentOrder = doc.data()['order'] ?? 0;
+  //       batch.update(doc.reference, {'order': currentOrder - 1});
+  //     }
+
+  //     // Commit the batch.
+  //     await batch.commit();
   //     return true;
   //   } catch (e) {
-  //     print('Error deleting service: $e');
+  //     print("Error deleting service: $e");
   //     rethrow;
   //   }
   // }
@@ -891,7 +730,7 @@ class ServiceFirebaseFirestore {
     }
   }
 
-  //! ----------------------  Service  FUNCTIONS ----------------------
+  //! ----------------------   THREE CATEGORY FUNCTIONS ----------------------
 
   // Create a new threeCategory document
   Future<CategoryModel> createThreeCategory({

@@ -176,6 +176,7 @@ class ServiceProvider with ChangeNotifier {
     int hours,
     int min,
     int order,
+    String description,
   ) async {
     int _serviceDurationMin = 0;
     Duration _serviceDurMin = Duration(hours: hours, minutes: min);
@@ -188,6 +189,7 @@ class ServiceProvider with ChangeNotifier {
       price,
       _serviceDurMin.inMinutes,
       order,
+      description,
     );
 
     notifyListeners();

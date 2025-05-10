@@ -29,6 +29,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
   final TextEditingController _hoursController = TextEditingController();
   final TextEditingController _minController = TextEditingController();
   final TextEditingController _orderAtController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -40,34 +41,15 @@ class _AddServiceFormState extends State<AddServiceForm> {
   void dispose() {
     _serviceController.dispose();
     _priceController.dispose();
+    _descriptionController.dispose();
     _hoursController.dispose();
     _minController.dispose();
     _orderAtController.dispose();
     super.dispose();
   }
 
-  // Function to update final price based on original price and discount percentage.
-  // void _updateFinalPrice() {
-  //   double originalPrice =
-  //       double.tryParse(_originalPriceController.text) ?? 0.0;
-  //   double discountPercentage = double.tryParse(_discountInPer.text) ?? 0.0;
-  //   double finalPrice =
-  //       originalPrice - (originalPrice * discountPercentage / 100);
-  //   // Update the final price controller's text (formatted to two decimals).
-  //   _priceController.text = finalPrice.toStringAsFixed(2);
-  // }
-
-  // void discountAmountFun() {
-  //   discountAmount = double.tryParse(_originalPriceController.text)! -
-  //       double.tryParse(_priceController.text)!;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // Retrieve providers if needed
-    // final appProvider = Provider.of<AppProvider>(context);
-    // final serviceProvider = Provider.of<ServiceProvider>(context);
-
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
       body: SingleChildScrollView(
@@ -118,22 +100,26 @@ class _AddServiceFormState extends State<AddServiceForm> {
               // Service Code field
 
               // Price fields: Original Price, Discount Percentage, and Final Price.
-              SizedBox(
-                width: Dimensions.dimenisonNo200,
-                child: FormCustomTextField(
-                  controller: _priceController,
-                  title: "Price",
-                ),
-              ),
-              SizedBox(
-                height: Dimensions.dimenisonNo20,
-              ),
-              SizedBox(
-                width: Dimensions.dimenisonNo200,
-                child: FormCustomTextField(
-                  controller: _orderAtController,
-                  title: "Order",
-                ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: Dimensions.dimenisonNo200,
+                    child: FormCustomTextField(
+                      controller: _priceController,
+                      title: "Price",
+                    ),
+                  ),
+                  SizedBox(
+                    width: Dimensions.dimenisonNo20,
+                  ),
+                  SizedBox(
+                    width: Dimensions.dimenisonNo200,
+                    child: FormCustomTextField(
+                      controller: _orderAtController,
+                      title: "Order",
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: Dimensions.dimenisonNo20,
@@ -190,9 +176,14 @@ class _AddServiceFormState extends State<AddServiceForm> {
                       ),
                     ],
                   ),
-                  // SizedBox(width: Dimensions.dimenisonNo30),
-                  // Service For Dropdown Column
                 ],
+              ),
+              SizedBox(height: Dimensions.dimenisonNo20),
+
+              FormCustomTextField(
+                controller: _descriptionController,
+                title: "Service description",
+                maxline: 3,
               ),
               SizedBox(height: Dimensions.dimenisonNo10),
 
@@ -219,9 +210,6 @@ class _AddServiceFormState extends State<AddServiceForm> {
                       return;
                     }
 
-                    // Retrieve provider data
-                    // final appProvider =
-                    //     Provider.of<AppProvider>(context, listen: false);
                     final serviceProvider =
                         Provider.of<ServiceProvider>(context, listen: false);
 
@@ -234,6 +222,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
                       int.parse(_hoursController.text.trim()),
                       int.parse(_minController.text.trim()),
                       int.parse(_orderAtController.text.trim()),
+                      _descriptionController.text.trim(),
                     );
 
                     // Update category status if required

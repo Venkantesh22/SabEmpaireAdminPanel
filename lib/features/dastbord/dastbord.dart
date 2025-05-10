@@ -1,5 +1,6 @@
 import 'package:admin_panel_ak/constants/global_variable.dart';
 import 'package:admin_panel_ak/constants/router.dart';
+import 'package:admin_panel_ak/features/FranchiseEnquiry/Screen/franchise_enquiry.dart';
 import 'package:admin_panel_ak/features/Service%20Provider/screen/add_service_provider.dart';
 import 'package:admin_panel_ak/features/Service%20Provider/screen/service_provider_list.dart';
 import 'package:admin_panel_ak/features/User/screen/userscreen.dart';
@@ -12,6 +13,7 @@ import 'package:admin_panel_ak/features/banner_section/screen/tab_banner_page.da
 import 'package:admin_panel_ak/features/footer_section/screen/footer_form.dart';
 import 'package:admin_panel_ak/features/job%20section/screen/job_list.dart';
 import 'package:admin_panel_ak/features/job%20section/screen/new_job_add.dart';
+import 'package:admin_panel_ak/features/reviews/screen/reviews_page.dart';
 import 'package:admin_panel_ak/features/service_service/screen/service_section.dart';
 import 'package:admin_panel_ak/features/user_enquiry_page/screen/user_enquiry_page.dart';
 import 'package:admin_panel_ak/firebase_helper/firebase_auth_helper/firebase_auth_helper.dart';
@@ -102,6 +104,16 @@ class _HomePageState extends State<HomeDashBord> {
         case RouteNames.user:
           setState(() {
             _selectedItem = UserScreen();
+          });
+          break;
+        case RouteNames.franchise:
+          setState(() {
+            _selectedItem = FranchiseEnquire();
+          });
+          break;
+        case RouteNames.reviews:
+          setState(() {
+            _selectedItem = ReviewsPage();
           });
           break;
         default:
@@ -246,6 +258,16 @@ class _HomePageState extends State<HomeDashBord> {
             title: 'Footer',
             route: RouteNames.footer,
             icon: Icons.details,
+          ),
+          AdminMenuItem(
+            title: 'Franchise Enquiry List',
+            route: RouteNames.franchise,
+            icon: Icons.person_search,
+          ),
+          AdminMenuItem(
+            title: 'Reviews ',
+            route: RouteNames.reviews,
+            icon: Icons.reviews,
           ),
         ],
         selectedRoute: '',

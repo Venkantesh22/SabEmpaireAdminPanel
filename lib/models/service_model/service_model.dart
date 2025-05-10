@@ -7,6 +7,7 @@ class ServiceModel {
   final double price;
   final int serviceDurationMin;
   final int order; // New field added
+  final String? description; // New nullable field added
 
   const ServiceModel({
     required this.id,
@@ -17,6 +18,7 @@ class ServiceModel {
     required this.price,
     required this.serviceDurationMin,
     required this.order, // New field added
+    this.description, // New nullable field added
   });
 
   // Create a ServiceModel from a JSON map.
@@ -32,6 +34,7 @@ class ServiceModel {
           : json['price'] ?? 0.0,
       serviceDurationMin: json['serviceDurationMin'] ?? 0,
       order: json['order'] ?? 0, // New field added
+      description: json['description'], // New nullable field added
     );
   }
 
@@ -46,6 +49,7 @@ class ServiceModel {
       'price': price,
       'serviceDurationMin': serviceDurationMin,
       'order': order, // New field added
+      'description': description, // New nullable field added
     };
   }
 
@@ -59,6 +63,7 @@ class ServiceModel {
     double? price,
     int? serviceDurationMin,
     int? order, // New field added
+    String? description, // New nullable field added
   }) {
     return ServiceModel(
       id: id ?? this.id,
@@ -69,6 +74,7 @@ class ServiceModel {
       price: price ?? this.price,
       serviceDurationMin: serviceDurationMin ?? this.serviceDurationMin,
       order: order ?? this.order, // New field added
+      description: description ?? this.description, // New nullable field added
     );
   }
 }

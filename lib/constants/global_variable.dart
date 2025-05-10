@@ -102,4 +102,5 @@ class GlobalVariable {
 
   static String LogWithBeuText = 'assets/images/sabWithBea.jpg';
   static String LogWithOutBeuText = 'assets/images/sab.jpg';
+  static String profileImage = 'assets/images/profile.jpg';
 }

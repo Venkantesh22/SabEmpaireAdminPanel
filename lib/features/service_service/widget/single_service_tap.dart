@@ -1,7 +1,3 @@
-//     );
-//   }
-// }
-
 import 'package:admin_panel_ak/constants/constants.dart';
 import 'package:admin_panel_ak/constants/router.dart';
 import 'package:admin_panel_ak/features/service_service/screen/edit_service_page.dart';
@@ -112,6 +108,19 @@ class SingleServiceTap extends StatelessWidget {
             ],
           ),
         ),
+        serviceModel.description != null
+            ? Text(
+                serviceModel.description!,
+                overflow: TextOverflow.fade,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: Dimensions.dimenisonNo14,
+                  fontFamily: GoogleFonts.roboto().fontFamily,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.15,
+                ),
+              )
+            : const SizedBox(),
       ],
     );
   }

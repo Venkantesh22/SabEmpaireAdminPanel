@@ -3,12 +3,15 @@
 import 'dart:typed_data';
 import 'package:admin_panel_ak/constants/constants.dart';
 import 'package:admin_panel_ak/firebase_helper/firebase_storage_helper/firebase_storage_helper.dart';
+import 'package:admin_panel_ak/models/ReviewModel/review_model.dart';
 import 'package:admin_panel_ak/models/footer_model/footer_model.dart';
+import 'package:admin_panel_ak/models/franchise_enquiry_model/franchise_enquiry_model.dart';
 import 'package:admin_panel_ak/models/image_model/image_model.dart';
 import 'package:admin_panel_ak/models/job_model/job_model.dart';
 import 'package:admin_panel_ak/models/service_provider_model/service_provider_model.dart';
 import 'package:admin_panel_ak/models/user_enquiry_model/user_enquiry_model.dart';
 import 'package:admin_panel_ak/models/user_model/user_model.dart';
+import 'package:admin_panel_ak/provider/appProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -312,7 +315,7 @@ class FirebaseFirestoreHelper {
           _firestore.collection("UserEnquiryForm").doc("form");
 
       QuerySnapshot<Map<String, dynamic>> snapshot =
-          await formRef.collection("UserEnquiryForm").get();
+          await formRef.collection("UserEnquiryFormList").get();
 
       return snapshot.docs.map((doc) {
         return UserEnquiryModel.fromJson(doc.data());
@@ -334,7 +337,7 @@ class FirebaseFirestoreHelper {
           _firestore.collection("UserEnquiryForm").doc("form");
 
       formRef
-          .collection("UserEnquiryForm")
+          .collection("UserEnquiryFormList")
           .doc(userEnquiryModel.id)
           .update(userEnquiryModel.toJson());
       showBottonMessage("Update Successfully", context);
@@ -408,33 +411,6 @@ class FirebaseFirestoreHelper {
 
   //! ---------------------- SERVICES FUNCTIONS ----------------------
 
-  // Future<bool> createServiceProvider(ServiceProviderModel serviceProviderModel,
-  //     Uint8List? selectedImage, BuildContext context) async {
-  //   try {
-  //     String? imgUrl = "no Image";
-  //     DocumentReference<Map<String, dynamic>> docRef =
-  //         _firestore.collection("serviceProvider").doc();
-
-  //     if (selectedImage != null && selectedImage.isNotEmpty) {
-  //       imgUrl = await FirebaseStorageHelper.instance
-  //           .uploadServicePvoviderPicImage(
-  //               serviceProviderModel.eId, selectedImage);
-  //     }
-
-  //     ServiceProviderModel _serviceProvider = serviceProviderModel.copyWith(
-  //       id: docRef.id,
-  //       image: imgUrl,
-  //     );
-
-  //     await docRef.set(_serviceProvider.toJson());
-  //     showBottonMessage("Service Provider created successfully", context);
-  //     return true;
-  //   } catch (e) {
-  //     print('Error: Error creating Service Provider: $e');
-  //     showBottonMessageError("Error creating Service Provider", context);
-  //     rethrow;
-  //   }
-  // }
   Future<bool> createServiceProvider(
     ServiceProviderModel serviceProviderModel,
     Uint8List? selectedImage,
@@ -648,6 +624,191 @@ class FirebaseFirestoreHelper {
     } catch (e) {
       print('Error getting User Information: $e');
       rethrow;
+    }
+  }
+
+  //! ---------------------- FRANCHISE FUNCTIONS ----------------------
+
+// Function to get a list of franchise forms
+  Future<List<FranchiseEnquiryModel>> getFranchiseFormList() async {
+    try {
+      // Reference to the "FranchiseForm/form" collection
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection("FranchiseForm")
+          .doc("formList")
+          .collection("form")
+          .get();
+
+      // Convert each document into a FranchiseEnquiryModel and return the list
+      return snapshot.docs.map((doc) {
+        return FranchiseEnquiryModel.fromJson(doc.data());
+      }).toList();
+    } catch (e) {
+      print("Error fetching franchise form list: $e");
+      throw Exception("Failed to fetch franchise form list");
+    }
+  }
+
+// Function to update a single franchise form by ID
+  Future<void> updateFranchiseFormById(
+      FranchiseEnquiryModel franchiseModel, BuildContext context) async {
+    try {
+      final docRef = FirebaseFirestore.instance
+          .collection('FranchiseForm')
+          .doc('formList')
+          .collection('form')
+          .doc(franchiseModel.id); // Ensure `id` is the document ID
+
+      final docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        // Update the document if it exists
+        await docRef.update(franchiseModel.toJson());
+        showBottonMessage('Franchise form updated successfully!', context);
+      } else {
+        // Handle the case where the document does not exist
+        showBottonMessageError('No document found to update.', context);
+      }
+    } catch (e) {
+      showBottonMessageError('Error updating franchise form: $e', context);
+    }
+  }
+
+  //! ----------------------  REVIEWS FUNCTIONS ----------------------
+
+  // Future<bool> uploadReviewsFB(
+  //   ReviewModel reviewModel,
+  //   BuildContext context,
+  // ) async {
+  //   try {
+  //     AppProvider appProvider =
+  //         Provider.of<AppProvider>(context, listen: false);
+  //     String? userId = _user.currentUser?.uid;
+
+  //     if (userId == null) {
+  //       showBottonMessageError("Error: User is not logged in.", context);
+  //       return false;
+  //     }
+
+  //     final userInformation = reviewModel.userModel;
+
+  //     if (userInformation == null) {
+  //       showBottonMessageError(
+  //           "Error: User information is not available.", context);
+  //       return false;
+  //     }
+
+  //     DocumentReference documentReference =
+  //         _firestore.collection("reviews").doc();
+
+  //     reviewModel = reviewModel.copyWith(id: documentReference.id);
+
+  //     await documentReference.set(reviewModel.toJson());
+  //     showBottonMessage("Reviews post", context);
+  //     return true;
+  //   } catch (e) {
+  //     print("Error post reviews $e");
+  //     showBottonMessageError("Error Post reviews try after some time", context);
+  //     return false;
+  //   }
+  // }
+
+  Stream<List<ReviewModel>> streamAllReviews() {
+    try {
+      return _firestore
+          .collection('reviews')
+          .orderBy('timeStampModel.dateAndTime', descending: true)
+          .snapshots()
+          .map((querySnapshot) {
+        return querySnapshot.docs
+            .map((doc) => ReviewModel.fromJson(doc.data()))
+            .toList();
+      });
+    } catch (e) {
+      print("Error: streaming all reviews $e");
+      rethrow;
+    }
+  }
+
+  // Future<ReviewModel?> getUserReviewsModel() async {
+  //   try {
+  //     String? userId = _user.currentUser?.uid;
+
+  //     if (userId == null) {
+  //       print("Error: User ID is null.");
+  //       return null;
+  //     }
+
+  //     QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+  //         .collection('reviews')
+  //         .where("userModel.id", isEqualTo: userId)
+  //         .get();
+
+  //     if (snapshot.docs.isNotEmpty) {
+  //       // Return the first matching review
+  //       return ReviewModel.fromJson(snapshot.docs.first.data());
+  //     } else {
+  //       print("No review found for the user with ID: $userId");
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     print("Error fetching user review: $e");
+  //     return null;
+  //   }
+  // }
+
+  /// Edit (update) an existing review
+  // Future<bool> editReviewFB(
+  //   ReviewModel reviewModel,
+  //   BuildContext context,
+  // ) async {
+  //   try {
+  //     if (reviewModel.id.isEmpty) {
+  //       showBottonMessageError("Error: Review ID is missing.", context);
+  //       return false;
+  //     }
+
+  //     final docRef = _firestore.collection("reviews").doc(reviewModel.id);
+
+  //     // Update only the fields you want; here we merge the entire JSON
+  //     await docRef.set(
+  //       reviewModel.toJson(),
+  //       SetOptions(merge: true),
+  //     );
+
+  //     showBottonMessage("Review updated", context);
+  //     return true;
+  //   } catch (e) {
+  //     debugPrint("Error updating review: $e");
+  //     showBottonMessageError(
+  //       "Error updating review. Please try again later.",
+  //       context,
+  //     );
+  //     return false;
+  //   }
+  // }
+
+  /// Delete a review by its ID
+  Future<bool> deleteReviewFB(
+    String reviewId,
+    BuildContext context,
+  ) async {
+    try {
+      if (reviewId.isEmpty) {
+        showBottonMessageError("Error: Review ID is missing.", context);
+        return false;
+      }
+
+      await _firestore.collection("reviews").doc(reviewId).delete();
+      showBottonMessage("Review deleted", context);
+      return true;
+    } catch (e) {
+      debugPrint("Error deleting review: $e");
+      showBottonMessageError(
+        "Error deleting review. Please try again later.",
+        context,
+      );
+      return false;
     }
   }
 }

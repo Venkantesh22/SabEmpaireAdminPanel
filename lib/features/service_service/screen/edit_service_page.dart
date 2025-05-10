@@ -30,14 +30,8 @@ class EditServicePage extends StatefulWidget {
 class _EditServicePageState extends State<EditServicePage> {
   String? _serviceFor;
   @override
-  // void initState() {
-  //   super.initState();
-  //   _serviceFor = widget.serviceModel.serviceFor;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // AppProvider appProvider = Provider.of<AppProvider>(context);
     Duration? serviceDuration =
         Duration(minutes: widget.serviceModel.serviceDurationMin);
     int _serviceDurationInHr = serviceDuration.inHours;
@@ -57,6 +51,8 @@ class _EditServicePageState extends State<EditServicePage> {
         TextEditingController(text: _serviceDurationInMin.toString());
     final TextEditingController _orderAtController =
         TextEditingController(text: widget.serviceModel.order.toString());
+    final TextEditingController _descriptionController =
+        TextEditingController(text: widget.serviceModel.description);
 
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
@@ -186,6 +182,11 @@ class _EditServicePageState extends State<EditServicePage> {
                   ],
                 ),
                 SizedBox(height: Dimensions.dimenisonNo10),
+                FormCustomTextField(
+                  controller: _descriptionController,
+                  title: "Service description",
+                  maxline: 3,
+                ),
 
                 CustomAuthButton(
                   text: "Save",
@@ -210,6 +211,7 @@ class _EditServicePageState extends State<EditServicePage> {
                           price: double.parse(_priceController.text.trim()),
                           serviceDurationMin: _serviceDurationMin.inMinutes,
                           order: int.parse(_orderAtController.text.trim()),
+                          description: _descriptionController.text.trim(),
                         );
 
                         serviceProvider.updateSingleServicePro(

@@ -7,6 +7,7 @@ import 'package:admin_panel_ak/firebase_helper/firebase_options/firebase_options
 import 'package:admin_panel_ak/provider/appProvider.dart';
 import 'package:admin_panel_ak/provider/bookingProvider.dart';
 import 'package:admin_panel_ak/provider/calender_provider.dart';
+import 'package:admin_panel_ak/provider/reviewsProvider.dart';
 import 'package:admin_panel_ak/provider/serviceProvider.dart';
 import 'package:admin_panel_ak/utility/dimenison.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ServiceProvider()),
         ChangeNotifierProvider(create: (context) => BookingProvider()),
         ChangeNotifierProvider(create: (context) => CalenderProvider()),
+        ChangeNotifierProvider(create: (context) => Reviewsprovider()),
       ],
       builder: (context, child) {
         return MaterialApp(

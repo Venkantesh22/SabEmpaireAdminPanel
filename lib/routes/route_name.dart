@@ -33,4 +33,8 @@ class RouteNames {
 
   // /dashbord/User/
   static const String user = '/user';
+  // /dashbord/franchise/
+  static const String franchise = '/franchise';
+  // /dashbord/Reviews/
+  static const String reviews = '/reviews';
 }

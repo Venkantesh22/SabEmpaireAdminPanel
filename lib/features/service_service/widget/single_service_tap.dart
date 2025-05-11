@@ -96,7 +96,7 @@ class SingleServiceTap extends StatelessWidget {
               ),
               SizedBox(width: Dimensions.dimenisonNo10),
               Text(
-                "${serviceDuration.inHours}h: ${serviceDuration.inMinutes % 60}min",
+                "${serviceDuration.inHours}h: ${(serviceDuration.inMinutes % 60).toString().padLeft(2, '0')}min",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: Dimensions.dimenisonNo16,
@@ -108,19 +108,6 @@ class SingleServiceTap extends StatelessWidget {
             ],
           ),
         ),
-        serviceModel.description != null
-            ? Text(
-                serviceModel.description!,
-                overflow: TextOverflow.fade,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: Dimensions.dimenisonNo14,
-                  fontFamily: GoogleFonts.roboto().fontFamily,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 0.15,
-                ),
-              )
-            : const SizedBox(),
       ],
     );
   }
@@ -148,24 +135,53 @@ class SingleServiceTap extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header row with service info and action buttons.
-            Row(
+            Column(
               children: [
-                _buildServiceInfo(serviceDuration),
-                const Spacer(),
-                IconButton(
-                  onPressed: () => _navigateToEditService(context),
-                  icon: const Icon(
-                    Icons.edit_square,
-                    color: Colors.black,
-                  ),
+                Row(
+                  children: [
+                    _buildServiceInfo(serviceDuration),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () => _navigateToEditService(context),
+                      icon: const Icon(
+                        Icons.edit_square,
+                        color: Colors.black,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => _confirmDelete(context, serviceProvider),
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  onPressed: () => _confirmDelete(context, serviceProvider),
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                ),
+                serviceModel.description != null
+                    ? SizedBox(
+                        height: Dimensions.dimenisonNo5,
+                      )
+                    : const SizedBox(),
+                serviceModel.description != null
+                    ? const Divider()
+                    : const SizedBox(),
+                serviceModel.description != null
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Dimensions.dimenisonNo8),
+                        child: Text(
+                          serviceModel.description!,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Dimensions.dimenisonNo14,
+                            fontFamily: GoogleFonts.roboto().fontFamily,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.15,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
               ],
             ),
           ],

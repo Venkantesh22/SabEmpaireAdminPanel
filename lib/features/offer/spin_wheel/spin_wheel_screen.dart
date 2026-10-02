@@ -1,4 +1,5 @@
 import 'package:admin_panel_ak/features/offer/spin_wheel/widget/spin_wheel_appbar.dart';
+import 'package:admin_panel_ak/features/offer/spin_wheel/widget/spin_wheel_option_section.dart';
 import 'package:admin_panel_ak/provider/spin_wheel_provider.dart';
 import 'package:admin_panel_ak/utility/color.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +26,10 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColor.spinWheelBackgroundColor,
-      appBar: const SpinWheelScreenAppbar(),
-      body: const SizedBox.shrink(),
+      appBar: SpinWheelScreenAppbar(),
+      body: SpinWheelOptionSection(),
     );
   }
 }

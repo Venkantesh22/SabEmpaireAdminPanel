@@ -13,10 +13,11 @@ class SpinWheelOptionModel {
 
   factory SpinWheelOptionModel.fromMap(Map<String, dynamic> map) {
     return SpinWheelOptionModel(
-      id: map['id']?.toString() ?? '',
-      title: map['title']?.toString() ?? '',
-      isRewardCanCome: map['isRewardCanCome'] ?? true,
-      howManyTimeComInMonth: map['howManyTimeComInMonth'] as int?,
+      id: map['id']?.toString(),
+      title: map['title']?.toString(),
+      isRewardCanCome: map['isRewardCanCome'] as bool? ?? true,
+      howManyTimeComInMonth:
+          (map['howManyTimeComInMonth'] as num?)?.toInt(),
     );
   }
 
@@ -27,5 +28,20 @@ class SpinWheelOptionModel {
       'isRewardCanCome': isRewardCanCome,
       'howManyTimeComInMonth': howManyTimeComInMonth,
     };
+  }
+
+  SpinWheelOptionModel copyWith({
+    String? id,
+    String? title,
+    bool? isRewardCanCome,
+    int? howManyTimeComInMonth,
+  }) {
+    return SpinWheelOptionModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      isRewardCanCome: isRewardCanCome ?? this.isRewardCanCome,
+      howManyTimeComInMonth:
+          howManyTimeComInMonth ?? this.howManyTimeComInMonth,
+    );
   }
 }

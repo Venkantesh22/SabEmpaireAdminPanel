@@ -13,6 +13,7 @@ import 'package:admin_panel_ak/features/banner_section/screen/tab_banner_page.da
 import 'package:admin_panel_ak/features/footer_section/screen/footer_form.dart';
 import 'package:admin_panel_ak/features/job%20section/screen/job_list.dart';
 import 'package:admin_panel_ak/features/job%20section/screen/new_job_add.dart';
+import 'package:admin_panel_ak/features/offer/spin_wheel/spin_wheel_screen.dart';
 import 'package:admin_panel_ak/features/reviews/screen/reviews_page.dart';
 import 'package:admin_panel_ak/features/service_service/screen/service_section.dart';
 import 'package:admin_panel_ak/features/user_enquiry_page/screen/user_enquiry_page.dart';
@@ -34,7 +35,7 @@ class HomeDashBord extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomeDashBord> {
-  Widget _selectedItem = ServiceSection();
+  Widget _selectedItem = const ServiceSection();
 
   screenSeletor(item) {
     try {
@@ -73,17 +74,17 @@ class _HomePageState extends State<HomeDashBord> {
           break;
         case RouteNames.userEnquiry:
           setState(() {
-            _selectedItem = UserEnquiryPage();
+            _selectedItem = const UserEnquiryPage();
           });
           break;
         case RouteNames.addAppoint:
           setState(() {
-            _selectedItem = AddNewAppointment();
+            _selectedItem = const AddNewAppointment();
           });
           break;
         case RouteNames.addJob:
           setState(() {
-            _selectedItem = JobAddPage();
+            _selectedItem = const JobAddPage();
           });
           break;
         case RouteNames.jobList:
@@ -108,12 +109,17 @@ class _HomePageState extends State<HomeDashBord> {
           break;
         case RouteNames.franchise:
           setState(() {
-            _selectedItem = FranchiseEnquire();
+            _selectedItem = const FranchiseEnquire();
           });
           break;
         case RouteNames.reviews:
           setState(() {
-            _selectedItem = ReviewsPage();
+            _selectedItem = const ReviewsPage();
+          });
+          break;
+        case RouteNames.spinAWheel:
+          setState(() {
+            _selectedItem = const SpinWheelScreen();
           });
           break;
         default:
@@ -142,7 +148,7 @@ class _HomePageState extends State<HomeDashBord> {
             future: loadAssetImage(GlobalVariable.LogWithOutBeuText),
             builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Icon(
                   Icons.error,
@@ -268,6 +274,19 @@ class _HomePageState extends State<HomeDashBord> {
             title: 'Reviews ',
             route: RouteNames.reviews,
             icon: Icons.reviews,
+          ),
+          AdminMenuItem(
+            title: 'Offer',
+         //   route: RouteNames.webBannerSection,
+            icon: Icons.local_offer_outlined,
+            children: [
+              AdminMenuItem(
+                title: 'Spin a wheel',
+                route: RouteNames.spinAWheel,
+                icon: Icons.local_offer_outlined,
+              ),
+              
+            ],
           ),
         ],
         selectedRoute: '',

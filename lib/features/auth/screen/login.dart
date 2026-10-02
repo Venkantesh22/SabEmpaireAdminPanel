@@ -33,12 +33,20 @@ class _LogingPageState extends State<LogingPage> {
 
   bool isloading = false;
   bool saveloading = false;
+
   Future<void> getDate() async {
+    if (!mounted) return;
+
     setState(() {
       isloading = true;
     });
-    AppProvider appProvider = Provider.of<AppProvider>(context, listen: false);
+
+    final AppProvider appProvider =
+        Provider.of<AppProvider>(context, listen: false);
+
     await appProvider.fatchFooterInfor();
+
+    if (!mounted) return;
 
     setState(() {
       isloading = false;
@@ -183,30 +191,30 @@ class _LogingPageState extends State<LogingPage> {
                                                       saveloading = true;
                                                     });
                                                     try {
-                                                      // If the form is valid, navigate to the home page.
                                                       bool isLogined =
                                                           await FirebaseAuthHelper
                                                               .instance
                                                               .login(
-                                                                  email,
-                                                                  password,
-                                                                  context);
+                                                        email,
+                                                        password,
+                                                        context,
+                                                      );
 
                                                       if (isLogined) {
-                                                        print(
-                                                            'login Successful for:  $email');
                                                         Routes.instance
                                                             .pushAndRemoveUntil(
-                                                                widget:
-                                                                    HomeDashBord(),
-                                                                context:
-                                                                    context);
+                                                          widget:
+                                                              HomeDashBord(),
+                                                          context: context,
+                                                        );
                                                       }
                                                     } catch (e) {
                                                       if (!mounted) return;
+
                                                       showBottonMessageError(
-                                                          "Error: ${e.toString()}",
-                                                          context);
+                                                        "Error: ${e.toString()}",
+                                                        context,
+                                                      );
                                                     } finally {
                                                       setState(() {
                                                         saveloading = false;

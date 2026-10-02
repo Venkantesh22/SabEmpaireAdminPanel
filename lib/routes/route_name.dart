@@ -37,4 +37,8 @@ class RouteNames {
   static const String franchise = '/franchise';
   // /dashbord/Reviews/
   static const String reviews = '/reviews';
+
+  // dashboard/ offer/ spin a wheel
+    static const String spinAWheel = '/spin_a_wheel';
+
 }

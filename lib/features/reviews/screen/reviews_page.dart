@@ -1,6 +1,5 @@
 // ignore_for_file: unused_field, prefer_final_fields
 
-import 'package:admin_panel_ak/features/reviews/widget/popup_reviews_edit.dart';
 import 'package:admin_panel_ak/features/reviews/widget/rating_bar.dart';
 import 'package:admin_panel_ak/features/reviews/widget/single_review.dart';
 import 'package:admin_panel_ak/features/reviews/widget/sorf_by_card.dart';
@@ -8,8 +7,6 @@ import 'package:admin_panel_ak/utility/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:admin_panel_ak/constants/constants.dart';
-import 'package:admin_panel_ak/constants/global_variable.dart';
 
 import 'package:admin_panel_ak/firebase_helper/firebase_firestore_helper/firebase_firestore.dart';
 import 'package:admin_panel_ak/models/ReviewModel/review_model.dart';

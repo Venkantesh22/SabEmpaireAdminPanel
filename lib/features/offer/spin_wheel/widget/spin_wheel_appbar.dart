@@ -18,7 +18,7 @@ class SpinWheelScreenAppbar extends StatelessWidget
       surfaceTintColor: AppColor.spinWheelAppBarColor,
 
       title: Text(
-        'Spin Wheel',
+        'Spin & Bling',
         style: TextStyle(
           fontSize: 22.sp,
           fontWeight: FontWeight.w700,

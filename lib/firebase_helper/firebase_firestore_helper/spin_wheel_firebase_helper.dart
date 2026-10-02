@@ -17,7 +17,7 @@ class SpinWheelFirestoreHelper {
       _firebaseFirestore.collection('offer').doc('spinWheel');
 
   // --------------------------------------------------
-  // Create Spin Wheel
+  // Create Spin & Bling
   // --------------------------------------------------
 
   Future<void> createSpinWheel() async {
@@ -29,15 +29,15 @@ class SpinWheelFirestoreHelper {
 
       await docRef.set(spinWheelModel.toMap());
 
-      log('Spin wheel created successfully.');
+      log('Spin & Bling created successfully.');
     } on FirebaseException catch (e) {
       log(
-        'Firebase error while creating spin wheel: '
+        'Firebase error while creating Spin & Bling: '
         '${e.code} - ${e.message}',
       );
       rethrow;
     } catch (e) {
-      log('Error while creating spin wheel: $e');
+      log('Error while creating Spin & Bling: $e');
       rethrow;
     }
   }
@@ -55,15 +55,15 @@ class SpinWheelFirestoreHelper {
         SetOptions(merge: true),
       );
 
-      log('Spin wheel offer is now LIVE.');
+      log('Spin & Bling offer is now LIVE.');
     } on FirebaseException catch (e) {
       log(
-        'Firebase error while turning ON spin wheel: '
+        'Firebase error while turning ON Spin & Bling: '
         '${e.code} - ${e.message}',
       );
       rethrow;
     } catch (e) {
-      log('Error while turning ON spin wheel: $e');
+      log('Error while turning ON Spin & Bling: $e');
       rethrow;
     }
   }
@@ -81,21 +81,21 @@ class SpinWheelFirestoreHelper {
         SetOptions(merge: true),
       );
 
-      log('Spin wheel offer is now OFF.');
+      log('Spin & Bling offer is now OFF.');
     } on FirebaseException catch (e) {
       log(
-        'Firebase error while turning OFF spin wheel: '
+        'Firebase error while turning OFF Spin & Bling: '
         '${e.code} - ${e.message}',
       );
       rethrow;
     } catch (e) {
-      log('Error while turning OFF spin wheel: $e');
+      log('Error while turning OFF Spin & Bling: $e');
       rethrow;
     }
   }
 
   // --------------------------------------------------
-  // Get Spin Wheel
+  // Get Spin & Bling
   // --------------------------------------------------
 
   Future<SpinWheelModel?> getSpinWheel() async {
@@ -110,18 +110,18 @@ class SpinWheelFirestoreHelper {
       return SpinWheelModel.fromMap(snapshot.data()!);
     } on FirebaseException catch (e) {
       log(
-        'Firebase error while fetching spin wheel: '
+        'Firebase error while fetching Spin & Bling: '
         '${e.code} - ${e.message}',
       );
       rethrow;
     } catch (e) {
-      log('Error while fetching spin wheel: $e');
+      log('Error while fetching Spin & Bling: $e');
       rethrow;
     }
   }
 
   // --------------------------------------------------
-  // ADD SPIN WHEEL OPTION
+  // ADD Spin & Bling OPTION
   // --------------------------------------------------
 
   Future<SpinWheelOptionModel> addSpinWheelOption(
@@ -130,8 +130,8 @@ class SpinWheelFirestoreHelper {
     try {
       if (!await _documentExists()) {
         throw Exception(
-          'Spin wheel document does not exist. '
-          'Create the spin wheel first.',
+          'Spin & Bling document does not exist. '
+          'Create the Spin & Bling first.',
         );
       }
 
@@ -148,7 +148,7 @@ class SpinWheelFirestoreHelper {
         final snapshot = await transaction.get(docRef);
 
         if (!snapshot.exists) {
-          throw Exception('Spin wheel document does not exist.');
+          throw Exception('Spin & Bling document does not exist.');
         }
 
         final data = snapshot.data() ?? {};
@@ -174,23 +174,23 @@ class SpinWheelFirestoreHelper {
         );
       });
 
-      log('Spin wheel option added: $optionId');
+      log('Spin & Bling option added: $optionId');
 
       return newOption;
     } on FirebaseException catch (e) {
       log(
-        'Firebase error while adding spin wheel option: '
+        'Firebase error while adding Spin & Bling option: '
         '${e.code} - ${e.message}',
       );
       rethrow;
     } catch (e) {
-      log('Error while adding spin wheel option: $e');
+      log('Error while adding Spin & Bling option: $e');
       rethrow;
     }
   }
 
   // --------------------------------------------------
-  // UPDATE SPIN WHEEL OPTION
+  // UPDATE Spin & Bling OPTION
   // --------------------------------------------------
 
   Future<void> updateSpinWheelOption(
@@ -201,7 +201,7 @@ class SpinWheelFirestoreHelper {
 
       if (optionId == null || optionId.isEmpty) {
         throw Exception(
-          'Spin wheel option ID is required for update.',
+          'Spin & Bling option ID is required for update.',
         );
       }
 
@@ -210,7 +210,7 @@ class SpinWheelFirestoreHelper {
 
         if (!snapshot.exists) {
           throw Exception(
-            'Spin wheel document does not exist.',
+            'Spin & Bling document does not exist.',
           );
         }
 
@@ -232,7 +232,7 @@ class SpinWheelFirestoreHelper {
 
         if (index == -1) {
           throw Exception(
-            'Spin wheel option with ID $optionId was not found.',
+            'Spin & Bling option with ID $optionId was not found.',
           );
         }
 
@@ -247,21 +247,21 @@ class SpinWheelFirestoreHelper {
         );
       });
 
-      log('Spin wheel option updated: $optionId');
+      log('Spin & Bling option updated: $optionId');
     } on FirebaseException catch (e) {
       log(
-        'Firebase error while updating spin wheel option: '
+        'Firebase error while updating Spin & Bling option: '
         '${e.code} - ${e.message}',
       );
       rethrow;
     } catch (e) {
-      log('Error while updating spin wheel option: $e');
+      log('Error while updating Spin & Bling option: $e');
       rethrow;
     }
   }
 
   // --------------------------------------------------
-  // DELETE SPIN WHEEL OPTION
+  // DELETE Spin & Bling OPTION
   // --------------------------------------------------
 
   Future<void> deleteSpinWheelOption(
@@ -272,7 +272,7 @@ class SpinWheelFirestoreHelper {
 
       if (id.isEmpty) {
         throw Exception(
-          'Spin wheel option ID is required for delete.',
+          'Spin & Bling option ID is required for delete.',
         );
       }
 
@@ -281,7 +281,7 @@ class SpinWheelFirestoreHelper {
 
         if (!snapshot.exists) {
           throw Exception(
-            'Spin wheel document does not exist.',
+            'Spin & Bling document does not exist.',
           );
         }
 
@@ -304,7 +304,7 @@ class SpinWheelFirestoreHelper {
 
         if (updatedList.length == existingList.length) {
           throw Exception(
-            'Spin wheel option with ID $id was not found.',
+            'Spin & Bling option with ID $id was not found.',
           );
         }
 
@@ -317,18 +317,40 @@ class SpinWheelFirestoreHelper {
         );
       });
 
-      log('Spin wheel option deleted: $id');
+      log('Spin & Bling option deleted: $id');
     } on FirebaseException catch (e) {
       log(
-        'Firebase error while deleting spin wheel option: '
+        'Firebase error while deleting Spin & Bling option: '
         '${e.code} - ${e.message}',
       );
       rethrow;
     } catch (e) {
-      log('Error while deleting spin wheel option: $e');
+      log('Error while deleting Spin & Bling option: $e');
       rethrow;
     }
   }
+
+  Future<void> updateSpinWheelCode(String code) async {
+  try {
+    await docRef.set(
+      {
+        'code': code.trim(),
+      },
+      SetOptions(merge: true),
+    );
+
+    log('Spin & Bling code updated successfully.');
+  } on FirebaseException catch (e) {
+    log(
+      'Firebase error while updating Spin & Bling code: '
+      '${e.code} - ${e.message}',
+    );
+    rethrow;
+  } catch (e) {
+    log('Error while updating Spin & Bling code: $e');
+    rethrow;
+  }
+}
 
   // --------------------------------------------------
   // Check Document Exists

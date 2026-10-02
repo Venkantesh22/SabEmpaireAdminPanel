@@ -21,7 +21,7 @@ class AppColor {
       Color.fromARGB(255, 207, 205, 205);
 
   // --------------------------------------------------
-  // Spin Wheel Colors
+  // Spin & Bling Colors
   // --------------------------------------------------
 
   static const spinWheelBackgroundColor =

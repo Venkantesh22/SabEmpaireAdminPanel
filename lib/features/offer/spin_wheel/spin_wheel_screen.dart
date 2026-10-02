@@ -1,4 +1,5 @@
 import 'package:admin_panel_ak/features/offer/spin_wheel/widget/spin_wheel_appbar.dart';
+import 'package:admin_panel_ak/features/offer/spin_wheel/widget/spin_wheel_code_section.dart';
 import 'package:admin_panel_ak/features/offer/spin_wheel/widget/spin_wheel_option_section.dart';
 import 'package:admin_panel_ak/provider/spin_wheel_provider.dart';
 import 'package:admin_panel_ak/utility/color.dart';
@@ -27,9 +28,23 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: AppColor.spinWheelBackgroundColor,
+      backgroundColor:
+          AppColor.spinWheelBackgroundColor,
+
       appBar: SpinWheelScreenAppbar(),
-      body: SpinWheelOptionSection(),
+
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(24),
+        child: Column(
+          children: [
+            SpinWheelCodeSection(),
+
+            SizedBox(height: 24),
+
+            SpinWheelOptionSection(),
+          ],
+        ),
+      ),
     );
   }
 }

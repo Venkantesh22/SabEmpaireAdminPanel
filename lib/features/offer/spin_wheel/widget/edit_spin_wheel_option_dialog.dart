@@ -88,7 +88,7 @@ class _EditSpinWheelOptionDialogState
         return AlertDialog(
           backgroundColor: Colors.white,
           title: Text(
-            'Edit Spin Wheel Option',
+            'Edit Spin & Bling Option',
             style: TextStyle(
               fontSize: 19.sp,
               fontWeight: FontWeight.w700,

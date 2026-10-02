@@ -35,7 +35,7 @@ class SpinWheelProvider with ChangeNotifier {
   }
 
   // --------------------------------------------------
-  // Spin Wheel Model
+  // Spin & Bling Model
   // --------------------------------------------------
 
   SpinWheelModel? _spinWheelModel;
@@ -43,7 +43,7 @@ class SpinWheelProvider with ChangeNotifier {
   SpinWheelModel? get spinWheelModel => _spinWheelModel;
 
   // --------------------------------------------------
-  // CREATE SPIN WHEEL
+  // CREATE Spin & Bling
   // --------------------------------------------------
 
   Future<bool> createSpinWheel() async {
@@ -58,14 +58,14 @@ class SpinWheelProvider with ChangeNotifier {
         spinWheelOptionModelList: [],
       );
 
-      log('Provider: Spin wheel created successfully.');
+      log('Provider: Spin & Bling created successfully.');
 
       return true;
     } catch (e, stackTrace) {
       _errorMessage = e.toString();
 
       log(
-        'Provider: Error creating spin wheel: $e',
+        'Provider: Error creating Spin & Bling: $e',
         stackTrace: stackTrace,
       );
 
@@ -99,7 +99,7 @@ class SpinWheelProvider with ChangeNotifier {
       _errorMessage = e.toString();
 
       log(
-        'Provider: Error turning ON spin wheel: $e',
+        'Provider: Error turning ON Spin & Bling: $e',
         stackTrace: stackTrace,
       );
 
@@ -133,7 +133,7 @@ class SpinWheelProvider with ChangeNotifier {
       _errorMessage = e.toString();
 
       log(
-        'Provider: Error turning OFF spin wheel: $e',
+        'Provider: Error turning OFF Spin & Bling: $e',
         stackTrace: stackTrace,
       );
 
@@ -144,7 +144,7 @@ class SpinWheelProvider with ChangeNotifier {
   }
 
   // --------------------------------------------------
-  // LOAD SPIN WHEEL
+  // LOAD Spin & Bling
   // --------------------------------------------------
 
   Future<SpinWheelModel?> loadSpinWheel({
@@ -163,7 +163,7 @@ class SpinWheelProvider with ChangeNotifier {
       _spinWheelModel = model;
 
       log(
-        'Provider: Spin wheel loaded. '
+        'Provider: Spin & Bling loaded. '
         'Exists: ${model != null}',
       );
 
@@ -172,7 +172,7 @@ class SpinWheelProvider with ChangeNotifier {
       _errorMessage = e.toString();
 
       log(
-        'Provider: Error loading spin wheel: $e',
+        'Provider: Error loading Spin & Bling: $e',
         stackTrace: stackTrace,
       );
 
@@ -214,7 +214,7 @@ class SpinWheelProvider with ChangeNotifier {
       }
 
       log(
-        'Provider: Spin wheel option added: ${newOption.id}',
+        'Provider: Spin & Bling option added: ${newOption.id}',
       );
 
       return true;
@@ -222,7 +222,7 @@ class SpinWheelProvider with ChangeNotifier {
       _errorMessage = e.toString();
 
       log(
-        'Provider: Error adding spin wheel option: $e',
+        'Provider: Error adding Spin & Bling option: $e',
         stackTrace: stackTrace,
       );
 
@@ -267,7 +267,7 @@ class SpinWheelProvider with ChangeNotifier {
       }
 
       log(
-        'Provider: Spin wheel option updated: ${option.id}',
+        'Provider: Spin & Bling option updated: ${option.id}',
       );
 
       return true;
@@ -275,7 +275,7 @@ class SpinWheelProvider with ChangeNotifier {
       _errorMessage = e.toString();
 
       log(
-        'Provider: Error updating spin wheel option: $e',
+        'Provider: Error updating Spin & Bling option: $e',
         stackTrace: stackTrace,
       );
 
@@ -316,7 +316,7 @@ class SpinWheelProvider with ChangeNotifier {
       }
 
       log(
-        'Provider: Spin wheel option deleted: $optionId',
+        'Provider: Spin & Bling option deleted: $optionId',
       );
 
       return true;
@@ -324,7 +324,7 @@ class SpinWheelProvider with ChangeNotifier {
       _errorMessage = e.toString();
 
       log(
-        'Provider: Error deleting spin wheel option: $e',
+        'Provider: Error deleting Spin & Bling option: $e',
         stackTrace: stackTrace,
       );
 
@@ -333,6 +333,36 @@ class SpinWheelProvider with ChangeNotifier {
       _setLoading(false);
     }
   }
+
+  Future<bool> updateSpinWheelCode(String code) async {
+  _setLoading(true);
+  _clearError();
+
+  try {
+    await _spinWheelFirestoreHelper.updateSpinWheelCode(code);
+
+    if (_spinWheelModel != null) {
+      _spinWheelModel = _spinWheelModel!.copyWith(
+        code: code,
+      );
+    }
+
+    log('Provider: Spin & Bling code updated.');
+
+    return true;
+  } catch (e, stackTrace) {
+    _errorMessage = e.toString();
+
+    log(
+      'Provider: Error updating Spin & Bling code: $e',
+      stackTrace: stackTrace,
+    );
+
+    return false;
+  } finally {
+    _setLoading(false);
+  }
+}
 
   // --------------------------------------------------
   // CLEAR

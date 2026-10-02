@@ -46,7 +46,7 @@ class SpinWheelOptionSection extends StatelessWidget {
                                   CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Spin Wheel Options',
+                                  'Spin & Bling Options',
                                   style: TextStyle(
                                     fontSize: 20.sp,
                                     fontWeight: FontWeight.w700,
@@ -56,7 +56,7 @@ class SpinWheelOptionSection extends StatelessWidget {
                                 ),
                                 SizedBox(height: 6.h),
                                 Text(
-                                  'Manage rewards available on the Spin Wheel.',
+                                  'Manage rewards available on the Spin & Bling.',
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                     color:
@@ -206,7 +206,7 @@ class _EmptySpinWheelOptions extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           Text(
-            'No Spin Wheel Options',
+            'No Spin & Bling Options',
             style: TextStyle(
               fontSize: 17.sp,
               fontWeight: FontWeight.w600,
@@ -215,7 +215,7 @@ class _EmptySpinWheelOptions extends StatelessWidget {
           ),
           SizedBox(height: 6.h),
           Text(
-            'Add your first reward option to the Spin Wheel.',
+            'Add your first reward option to the Spin & Bling.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 13.sp,

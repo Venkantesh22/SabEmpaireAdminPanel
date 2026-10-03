@@ -58,6 +58,9 @@ class SpinWheelOptionTable extends StatelessWidget {
                       label: Text('Per month'),
                     ),
                     DataColumn(
+                      label: Text('Available'),
+                    ),
+                    DataColumn(
                       label: Text('Active'),
                     ),
                     DataColumn(
@@ -151,6 +154,38 @@ class SpinWheelOptionTable extends StatelessWidget {
                             ),
                           ),
 
+                          DataCell(
+                            GestureDetector(
+                              onDoubleTap: () {
+                                _showEditDialog(
+                                  context,
+                                  option,
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10.w,
+                                  vertical: 7.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF0FDF4),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: Text(
+                                  option.howAvailableInMonth?.toString() ??
+                                      'no data',
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: option.howAvailableInMonth == 0
+                                        ? AppColor.spinWheelErrorColor
+                                        : AppColor.spinWheelOnColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
                           // Active
                           DataCell(
                             Consumer<SpinWheelProvider>(
@@ -192,6 +227,8 @@ class SpinWheelOptionTable extends StatelessWidget {
                                                 isRewardCanCome: value,
                                                 howManyTimeComInMonth: option
                                                     .howManyTimeComInMonth,
+                                                howAvailableInMonth:
+                                                    option.howAvailableInMonth,
                                               );
 
                                               await provider

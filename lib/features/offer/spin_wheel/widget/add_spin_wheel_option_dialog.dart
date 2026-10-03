@@ -26,43 +26,58 @@ class _AddSpinWheelOptionDialogState
   final TextEditingController _timesController =
       TextEditingController();
 
+  
+
   bool _isRewardCanCome = true;
 
   @override
   void dispose() {
     _titleController.dispose();
     _timesController.dispose();
+
     super.dispose();
   }
 
-  Future<void> _addOption() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    final int? times = _timesController.text.trim().isEmpty
-        ? null
-        : int.tryParse(
-            _timesController.text.trim(),
-          );
-
-    final SpinWheelOptionModel option =
-        SpinWheelOptionModel(
-      title: _titleController.text.trim(),
-      howManyTimeComInMonth: times,
-      isRewardCanCome: _isRewardCanCome,
-    );
-
-    final bool success = await context
-        .read<SpinWheelProvider>()
-        .addSpinWheelOption(option);
-
-    if (!mounted) return;
-
-    if (success) {
-      Navigator.pop(context);
-    }
+Future<void> _addOption() async {
+  if (!_formKey.currentState!.validate()) {
+    return;
   }
+
+  final String title =
+      _titleController.text.trim();
+
+  final String timesText =
+      _timesController.text.trim();
+
+ 
+
+  final int? times = timesText.isEmpty
+      ? null
+      : int.tryParse(timesText);
+
+  
+
+  
+
+  final SpinWheelOptionModel option =
+      SpinWheelOptionModel(
+    title: title,
+    howManyTimeComInMonth: times,
+    howAvailableInMonth: times,
+    isRewardCanCome: _isRewardCanCome,
+    
+  );
+
+  final bool success = await context
+      .read<SpinWheelProvider>()
+      .addSpinWheelOption(option);
+
+  if (!mounted) return;
+
+  if (success) {
+    Navigator.pop(context);
+  }
+}
 
   @override
   Widget build(BuildContext context) {

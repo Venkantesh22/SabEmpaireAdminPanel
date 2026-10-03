@@ -18,13 +18,11 @@ class EditSpinWheelOptionDialog extends StatefulWidget {
       _EditSpinWheelOptionDialogState();
 }
 
-class _EditSpinWheelOptionDialogState
-    extends State<EditSpinWheelOptionDialog> {
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>();
+class _EditSpinWheelOptionDialogState extends State<EditSpinWheelOptionDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _titleController;
-  late final TextEditingController _timesController;
+  late final TextEditingController _timesController;late final TextEditingController _availableController;
 
   @override
   void initState() {
@@ -37,12 +35,17 @@ class _EditSpinWheelOptionDialogState
     _timesController = TextEditingController(
       text: widget.option.howManyTimeComInMonth?.toString() ?? '',
     );
+
+    _availableController = TextEditingController(
+  text: widget.option.howAvailableInMonth?.toString() ?? '',
+);
   }
 
   @override
   void dispose() {
     _titleController.dispose();
     _timesController.dispose();
+    _availableController.dispose();
     super.dispose();
   }
 
@@ -51,23 +54,34 @@ class _EditSpinWheelOptionDialogState
       return;
     }
 
-    final String title =
-        _titleController.text.trim();
+    final String title = _titleController.text.trim();
 
-    final String timesText =
-        _timesController.text.trim();
+    final String timesText = _timesController.text.trim();
 
-    final int? times = timesText.isEmpty
-        ? null
-        : int.tryParse(timesText);
+    final int? times = timesText.isEmpty ? null : int.tryParse(timesText);
+    final int? available = _availableController.text.isEmpty ? null : int.tryParse(_availableController.text);
+    
+    if (times != null &&
+      available != null &&
+      available > times) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Available in month cannot be greater than Per month.',
+        ),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
 
-    final SpinWheelOptionModel updatedOption =
-        SpinWheelOptionModel(
+    return;
+  }
+    final SpinWheelOptionModel updatedOption = SpinWheelOptionModel(
       id: widget.option.id,
       title: title,
-      isRewardCanCome:
-          widget.option.isRewardCanCome ?? true,
+      isRewardCanCome: widget.option.isRewardCanCome ?? true,
       howManyTimeComInMonth: times,
+      howAvailableInMonth: available
     );
 
     final bool success = await context
@@ -108,22 +122,18 @@ class _EditSpinWheelOptionDialogState
                     decoration: InputDecoration(
                       labelText: 'Reward Title',
                       border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.r),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
                     ),
                     validator: (value) {
-                      if (value == null ||
-                          value.trim().isEmpty) {
+                      if (value == null || value.trim().isEmpty) {
                         return 'Please enter reward title';
                       }
 
                       return null;
                     },
                   ),
-
                   SizedBox(height: 16.h),
-
                   TextFormField(
                     controller: _timesController,
                     enabled: !provider.isLoading,
@@ -132,18 +142,15 @@ class _EditSpinWheelOptionDialogState
                       labelText: 'How Many Times in Month',
                       hintText: 'Leave empty for unlimited',
                       border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.r),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
                     ),
                     validator: (value) {
-                      if (value == null ||
-                          value.trim().isEmpty) {
+                      if (value == null || value.trim().isEmpty) {
                         return null;
                       }
 
-                      final int? number =
-                          int.tryParse(value.trim());
+                      final int? number = int.tryParse(value.trim());
 
                       if (number == null) {
                         return 'Enter a valid number';
@@ -156,24 +163,52 @@ class _EditSpinWheelOptionDialogState
                       return null;
                     },
                   ),
-
                   SizedBox(height: 12.h),
+                  TextFormField(
+                    controller: _availableController,
+                    enabled: !provider.isLoading,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Available This Month',
+                      hintText: 'Example: 2',
+                      helperText:
+                          'Remaining times this reward can be won this month',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return null;
+                      }
 
+                      final int? number = int.tryParse(value.trim());
+
+                      if (number == null) {
+                        return 'Enter a valid number';
+                      }
+
+                      if (number < 0) {
+                        return 'Cannot be negative';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 12.h),
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(12.r),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF7F8FA),
-                      borderRadius:
-                          BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           Icons.info_outline,
                           size: 18.r,
-                          color:
-                              AppColor.spinWheelOffColor,
+                          color: AppColor.spinWheelOffColor,
                         ),
                         SizedBox(width: 8.w),
                         Expanded(
@@ -181,8 +216,7 @@ class _EditSpinWheelOptionDialogState
                             'Use the Reward switch in the table to enable or disable this option.',
                             style: TextStyle(
                               fontSize: 11.sp,
-                              color:
-                                  AppColor.spinWheelOffColor,
+                              color: AppColor.spinWheelOffColor,
                             ),
                           ),
                         ),
@@ -203,20 +237,16 @@ class _EditSpinWheelOptionDialogState
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: provider.isLoading
-                  ? null
-                  : _updateOption,
+              onPressed: provider.isLoading ? null : _updateOption,
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    AppColor.buttonRedColor,
+                backgroundColor: AppColor.buttonRedColor,
                 foregroundColor: Colors.white,
               ),
               child: provider.isLoading
                   ? SizedBox(
                       width: 18.r,
                       height: 18.r,
-                      child:
-                          const CircularProgressIndicator(
+                      child: const CircularProgressIndicator(
                         strokeWidth: 2,
                         color: Colors.white,
                       ),

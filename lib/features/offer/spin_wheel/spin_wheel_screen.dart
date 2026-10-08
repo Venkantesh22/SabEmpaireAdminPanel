@@ -1,6 +1,7 @@
 import 'package:admin_panel_ak/features/offer/spin_wheel/widget/spin_wheel_appbar.dart';
 import 'package:admin_panel_ak/features/offer/spin_wheel/widget/spin_wheel_code_section.dart';
 import 'package:admin_panel_ak/features/offer/spin_wheel/widget/spin_wheel_option_section.dart';
+import 'package:admin_panel_ak/features/offer/spin_wheel_winner_section/spin_wheel_winner_section.dart';
 import 'package:admin_panel_ak/provider/spin_wheel_provider.dart';
 import 'package:admin_panel_ak/utility/color.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,12 @@ class SpinWheelScreen extends StatefulWidget {
   const SpinWheelScreen({super.key});
 
   @override
-  State<SpinWheelScreen> createState() => _SpinWheelScreenState();
+  State<SpinWheelScreen> createState() =>
+      _SpinWheelScreenState();
 }
 
-class _SpinWheelScreenState extends State<SpinWheelScreen> {
+class _SpinWheelScreenState
+    extends State<SpinWheelScreen> {
   @override
   void initState() {
     super.initState();
@@ -21,7 +24,12 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
     Future.microtask(() {
       if (!mounted) return;
 
-      context.read<SpinWheelProvider>().loadSpinWheel();
+      final SpinWheelProvider provider =
+          context.read<SpinWheelProvider>();
+
+      provider.loadSpinWheel();
+
+      provider.loadSpinWheelWinners();
     });
   }
 
@@ -30,9 +38,7 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
     return const Scaffold(
       backgroundColor:
           AppColor.spinWheelBackgroundColor,
-
       appBar: SpinWheelScreenAppbar(),
-
       body: SingleChildScrollView(
         padding: EdgeInsets.all(24),
         child: Column(
@@ -42,6 +48,10 @@ class _SpinWheelScreenState extends State<SpinWheelScreen> {
             SizedBox(height: 24),
 
             SpinWheelOptionSection(),
+
+            SizedBox(height: 24),
+
+            SpinWheelWinnerSection(),
           ],
         ),
       ),

@@ -1434,7 +1434,7 @@ class _AddNewAppointmentState extends State<AddNewAppointment> {
                             SizedBox(
                               height: Dimensions.dimenisonNo12,
                             ),
-                            Icon(
+                            FaIcon(
                               FontAwesomeIcons.solidHourglassHalf,
                               size: Dimensions.dimenisonNo40,
                               color: AppColor.buttonRedColor,

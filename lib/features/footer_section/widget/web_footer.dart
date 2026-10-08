@@ -7,7 +7,7 @@ import 'package:admin_panel_ak/models/footer_model/footer_model.dart';
 import 'package:admin_panel_ak/utility/dimenison.dart';
 
 Widget webFooter(
-    IconButton Function(IconData iconData, String url) iconButtonMethod,
+    IconButton Function(FaIconData iconData, String url) iconButtonMethod,
     BuildContext context,
     FooterModel footerModel,
     String email) {
@@ -20,7 +20,7 @@ Widget webFooter(
     }
   }
 
-  IconButton _buildSocialIcon(IconData iconData, String url) {
+  IconButton _buildSocialIcon(FaIconData iconData, String url) {
     return IconButton(
       onPressed: () {
         if (url.isNotEmpty) {
@@ -198,7 +198,7 @@ Widget webFooter(
                     // Social media icons row
                     Wrap(
                       children: [
-                        _buildSocialIcon(Icons.facebook, footerModel.facebook),
+                        _buildSocialIcon(FontAwesomeIcons.facebook, footerModel.facebook),
                         if (footerModel.instaragran.isNotEmpty)
                           _buildSocialIcon(FontAwesomeIcons.instagram,
                               footerModel.instaragran),

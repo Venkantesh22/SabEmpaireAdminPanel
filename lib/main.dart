@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
 
         // Better performance.
-        // Use context.w(), context.h(), context.r(), context.sp()
+        // Use context.w(), context.h(), context.r(), ßontext.sp()
         // in widgets when this is false.
         autoRebuild: false,
 

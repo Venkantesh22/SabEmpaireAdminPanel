@@ -295,10 +295,10 @@ class RowOfStates extends StatelessWidget {
                               },
                               child: Row(
                                 children: [
-                                  Icon(
-                                    FontAwesomeIcons.scissors,
-                                    size: Dimensions.dimenisonNo14,
-                                  ),
+FaIcon(
+  FontAwesomeIcons.scissors,
+  size: Dimensions.dimenisonNo14,
+),
                                   SizedBox(width: Dimensions.dimenisonNo10),
                                   Text(
                                     "InServices",
@@ -340,7 +340,7 @@ class RowOfStates extends StatelessWidget {
                                   onPressed: () {},
                                   child: Row(
                                     children: [
-                                      Icon(
+                                      FaIcon(
                                         FontAwesomeIcons.scissors,
                                         size: Dimensions.dimenisonNo14,
                                       ),

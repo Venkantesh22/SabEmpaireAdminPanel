@@ -41,7 +41,7 @@ dependencies:
   cloud_firestore: ^5.4.4
   google_fonts: ^6.3.3
   firebase_storage: ^12.3.2
-  font_awesome_flutter: ^10.7.0
+  font_awesome_flutter: ^11.0.0
   fluttertoast: ^8.2.8
   file_picker: ^9.0.2
   image_picker: ^1.1.2

@@ -21,7 +21,7 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     IconButton iconButtonMethod(
-      IconData iconData,
+      FaIconData iconData,
       String url,
     ) {
       return IconButton(
